@@ -1,0 +1,6 @@
+*.a
+*.o
+libs
+.built
+.depend
+Make.dep
