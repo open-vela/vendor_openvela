@@ -108,7 +108,21 @@ do
   fi
 done
 
+if [ ! -f ${TOP_DIR}/nuttx/vela_system.bin ]; then
+  echo "Copy vela_system.img"
+  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/system.img ${TOP_DIR}/nuttx/vela_system.bin
+fi
+
+if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
+  echo "Copy vela_data.img"
+  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/data.img ${AVD_PATH}/vela_data.bin
+fi
+
 QEMU_OPTION="${QEMU_OPTION} \
+-drive index=0,id=system,if=none,format=raw,file=${TOP_DIR}/nuttx/vela_system.bin \
+-device virtio-blk-device,bus=virtio-mmio-bus.0,drive=system \
+-drive index=1,id=userdata,if=none,format=raw,file=${AVD_PATH}/vela_data.bin \
+-device virtio-blk-device,bus=virtio-mmio-bus.1,drive=userdata \
 -device virtio-snd,bus=virtio-mmio-bus.2 \
 -allow-host-audio -semihosting"
 
