@@ -1,0 +1,83 @@
+{
+  "package": "com.application.x4b.voicepage",
+  "name": "voicepage",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "display": {
+    "backgroundColor": "#000000"
+  },
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "service.internal.micoaudio"
+    },
+    {
+      "name": "system.internal.miai"
+    },
+    {
+      "name": "system.internal.mesh"
+    },
+    {
+      "name": "service.mihome"
+    },
+    {
+      "name": "system.wifi"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800
+  },
+  "router": {
+    "entry": "pages/entry",
+    "pages": {
+      "pages/weather/home": {
+        "component": "index"
+      },
+      "pages/weather/day": {
+        "component": "index"
+      },
+      "pages/weather/forecast": {
+        "component": "index"
+      },
+      "pages/dialogue": {
+        "component": "index"
+      },
+      "pages/translation": {
+        "component": "index"
+      },
+      "pages/poem": {
+        "component": "index"
+      },
+      "pages/entry": {
+        "component": "index"
+      },
+      "pages/mesh/home": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/mesh/set": {
+        "component": "index"
+      },
+      "pages/baike": {
+        "component": "index"
+      }
+    },
+    "widgets": {
+      "widgets/weather": {
+        "name": "weather",
+        "component": "index"
+      }
+    }
+  }
+}

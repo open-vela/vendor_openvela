@@ -1,0 +1,39 @@
+{
+  "package": "com.application.x4b.xiaoaivoice",
+  "priority": "high",
+  "name": "xiaoaivoice",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.internal.miai"
+    },
+    {
+      "name": "service.internal.micoaudio"
+    },
+    {
+      "name": "system.internal.activity"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "imageCache": 480000
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index"
+      }
+    }
+  }
+}

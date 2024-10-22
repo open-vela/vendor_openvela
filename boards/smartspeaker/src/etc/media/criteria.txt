@@ -1,0 +1,14 @@
+InclusiveCriterion UsingDevices     : mic a2dpsnk = mic
+InclusiveCriterion ActiveStreams    : acap VOIPtx WWEtx MDStx
+ExclusiveCriterion Ring             : amovie_async@Ring
+ExclusiveCriterion Music            : amovie_async@Music
+ExclusiveCriterion Alarm            : amovie_async@Alarm
+ExclusiveCriterion Video Video0     : movie_async@Video0
+ExclusiveCriterion VtunVideo Video1 : movie_async@Video1
+ExclusiveCriterion TalkCap          : amoviesink_async@acap
+ExclusiveCriterion VoipCap          : amoviesink_async@VOIPtx
+ExclusiveCriterion WWEtx            : amoviesink_async@WWEtx
+ExclusiveCriterion MDStx            : amoviesink_async@MDStx
+NumericalCriterion persist.media.AlarmVolume AlarmVolume : [0,10] = 5
+NumericalCriterion persist.media.A2dpsnkVolume A2dpsnkVolume RingVolume MusicVolume MediaVolume : [0,10] = 5
+ExclusiveCriterion VoiceChangeMode        : normal dashu xiaochou = normal

@@ -1,0 +1,70 @@
+domain: MicDomain
+	conf: enable
+		UsingDevices Includes mic
+		FFmpegCommand = pcm10c,unmute;pcm11c,unmute;pcm12c,unmute;
+	conf: disable
+		ALL
+		FFmpegCommand = pcm10c,mute;pcm11c,mute;pcm12c,mute;
+
+domain: A2dpDomain
+	conf: enable
+		UsingDevices Includes a2dpsnk
+		FFmpegCommand = a2dpsnk,start;
+	conf: disable
+		ALL
+		FFmpegCommand = a2dpsnk,stop;
+
+domain: A2dpsnkVolumeDomain
+	conf: 0
+		A2dpsnkVolume In 0
+		FFmpegCommand = VolA2dpsnk,volume,0;pcm0p,set_parameter,-96;
+	conf: index-%A2dpsnkVolume
+		A2dpsnkVolume In [1,9]
+		FFmpegCommand = VolA2dpsnk,volume,10^(-4*(10-%A2dpsnkVolume%)/20);pcm0p,set_parameter,4 %A2dpsnkVolume%;
+	conf: 10
+		A2dpsnkVolume In 10
+		FFmpegCommand = VolA2dpsnk,volume,1;pcm0p,set_parameter,0;
+
+domain: RingVolumeDomain
+	conf: 0
+		RingVolume In 0
+		FFmpegCommand = VolRing,volume,0;pcm0p,set_parameter,-96;
+	conf: index-%RingVolume
+		RingVolume In [1,9]
+		FFmpegCommand = VolRing,volume,10^(-4*(10-%RingVolume%)/20);pcm0p,set_parameter,4 %RingVolume%;
+	conf: 10
+		RingVolume In 10
+		FFmpegCommand = VolRing,volume,1;pcm0p,set_parameter,0;
+
+domain: MusicVolumeDomain
+	conf: 0
+		MusicVolume In 0
+		FFmpegCommand = VolMusic,volume,0;pcm0p,set_parameter,-96;
+	conf: index-%MusicVolume
+		MusicVolume In [1,9]
+		FFmpegCommand = VolMusic,volume,10^(-4*(10-%MusicVolume%)/20);pcm0p,set_parameter,4 %MusicVolume%;
+	conf: 10
+		MusicVolume In 10
+		FFmpegCommand = VolMusic,volume,1;pcm0p,set_parameter,0;
+
+domain: MediaVolumeDomain
+	conf: 0
+		MediaVolume In 0
+		FFmpegCommand = VolMedia,volume,0;pcm0p,set_parameter,-96;
+	conf: index-%MediaVolume
+		MediaVolume In [1,9]
+		FFmpegCommand = VolMedia,volume,10^(-4*(10-%MediaVolume%)/20);pcm0p,set_parameter,4 %MediaVolume%;
+	conf: 10
+		MediaVolume In 10
+		FFmpegCommand = VolMedia,volume,1;pcm0p,set_parameter,0;
+
+domain: AlarmVolumeDomain
+	conf: 0
+		AlarmVolume In 0
+		FFmpegCommand = VolAlarm,volume,0;pcm0p,set_parameter,-96;
+	conf: index-%AlarmVolume
+		AlarmVolume In [1,9]
+		FFmpegCommand = VolAlarm,volume,10^(-4*(10-%AlarmVolume%)/20);pcm0p,set_parameter,4 %AlarmVolume%;
+	conf: 10
+		AlarmVolume In 10
+		FFmpegCommand = VolAlarm,volume,1;pcm0p,set_parameter,0;

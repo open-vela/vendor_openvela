@@ -1,0 +1,122 @@
+{
+  "package": "com.application.x4b.widgets",
+  "name": "widget-demo",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "service.internal.audiosync"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      },
+      "pages/detail": {
+        "component": "detail"
+      }
+    },
+    "widgets": {
+      "widgets/demo": {
+        "name": "demo",
+        "description": "demo",
+        "component": "demo",
+        "features": [
+          "/common/images/telephone.png"
+        ]
+      },
+      "widgets/music": {
+        "name": "music",
+        "description": "远程组件music",
+        "component": "music",
+        "features": []
+      },
+      "widgets/iot": {
+        "name": "iot",
+        "description": "远程组件iot",
+        "component": "iot",
+        "path": "/widgets/iot",
+        "features": []
+      },
+      "widgets/alarm": {
+        "name": "alarm",
+        "description": "远程组件alarm",
+        "component": "alarm",
+        "path": "/widgets/alarm",
+        "features": []
+      },
+      "widgets/audio": {
+        "name": "audio",
+        "description": "远程组件audio",
+        "component": "audio",
+        "path": "/widgets/audio",
+        "features": [],
+        "assets": [
+          "/common/images/x4b/music-cover.png",
+          "/common/images/x4b/icon-pause.png",
+          "/common/images/x4b/audio-bg.png"
+        ]
+      },
+      "widgets/light": {
+        "name": "light",
+        "description": "远程组件light",
+        "component": "light",
+        "path": "/widgets/light",
+        "features": []
+      },
+      "widgets/weather": {
+        "name": "weather",
+        "description": "远程组件weather",
+        "component": "weather",
+        "path": "/widgets/weather",
+        "features": []
+      },
+      "widgets/album": {
+        "name": "album",
+        "description": "远程组件album",
+        "component": "album",
+        "path": "/widgets/album",
+        "features": [],
+        "assets": [
+          "/common/images/x4b/bg-album1.png",
+          "/common/images/x4b/bg-album2.png"
+        ]
+      },
+      "widgets/device": {
+        "name": "device",
+        "description": "远程组件device",
+        "component": "device",
+        "path": "/widgets/device",
+        "features": [],
+        "assets": [
+          "/common/images/devices/addlight.png",
+          "/common/images/devices/light.png",
+          "/common/images/devices/reducelight.png",
+          "/common/images/devices/addlight.png"
+        ]
+      },
+      "widgets/calendar": {
+        "name": "calendar",
+        "description": "calendar",
+        "component": "calendar",
+        "path": "/widgets/calendar",
+        "features": [],
+        "assets": []
+      }
+    }
+  }
+}

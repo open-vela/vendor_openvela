@@ -1,0 +1,45 @@
+{
+  "package": "com.application.x4b.login",
+  "name": "vela-demo-1",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.wifi"
+    },
+    {
+      "name": "service.internal.account"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "imageCache": 1048576
+  },
+  "display": {
+    "backgroundColor": "#000000",
+    "textColor": "#ffffff"
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      },
+      "pages/change": {
+        "component": "index"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+choice
+	prompt "Select subsystem"
+
+config VELA_AP
+	bool "VELA QEMU AP"
+	---help---
+		vela qemu ap
+
+endchoice
+
+if ARCH_BOARD_CUSTOM
+
+endif

@@ -1,0 +1,21 @@
+{
+    "package": "com.vela.event_service",
+    "name": "event_service",
+    "appType": "NATIVE",
+    "versionName": "1.0.0",
+    "versionCode": 1,
+    "icon": "launch.png",
+    "execfile": "es",
+    "activities": [],
+    "services": [
+        {
+            "name": "ESService",
+            "priority": "persistent",
+            "intent-filter": {
+                "actions": [
+                    "action.system.BOOT_READY"
+                ]
+            }
+        }
+    ]
+}

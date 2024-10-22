@@ -1,6 +1,0 @@
-set +e
-kvdbd &
-adbd &
-mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
-mount -t tmpfs /tmp
-mount -t fatfs /dev/virtblk0 /data

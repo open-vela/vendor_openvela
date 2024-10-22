@@ -1,0 +1,61 @@
+{
+  "package": "com.application.x4b.controlcenter",
+  "priority": "high",
+  "name": "x4b-controlcenter",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.brightness"
+    },
+    {
+      "name": "system.volume"
+    },
+    {
+      "name": "system.exchange"
+    },
+    {
+      "name": "system.internal.settings"
+    },
+    {
+      "name": "system.messageChannel"
+    },
+    {
+      "name": "service.internal.micoaudio"
+    },
+    {
+      "name": "service.internal.account"
+    },
+    {
+      "name": "service.internal.miot"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "imageCache": 1048576
+  },
+  "display": {
+    "backgroundColor": "#000"
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/volume": {
+        "component": "index"
+      }
+    }
+  }
+}

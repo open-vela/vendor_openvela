@@ -1,0 +1,66 @@
+{
+  "package": "com.application.x4b.musicplayer",
+  "priority": "high",
+  "name": "musicplayer",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "service.internal.micoaudio"
+    },
+    {
+      "name": "system.fetch"
+    },
+    {
+      "name": "service.internal.account"
+    },
+    {
+      "name": "system.internal.settings"
+    },
+    {
+      "name": "system.internal.miai"
+    },
+    {
+      "name": "system.messageChannel"
+    },
+    {
+      "name": "service.internal.miot"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "microFmkMode": true,
+    "designWidth": 800,
+    "designHeight": 480,
+    "imageCache": 3145728
+  },
+  "display": {
+    "backgroundColor": "#000000"
+  },
+  "router": {
+    "entry": "pages/player",
+    "pages": {
+      "pages/player": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/playlist": {
+        "component": "index"
+      },
+      "pages/lyric": {
+        "component": "index"
+      },
+      "pages/vipGuide": {
+        "component": "index"
+      }
+    }
+  }
+}
