@@ -1,0 +1,84 @@
+{
+  "package": "com.application.x4b.lockscreen",
+  "name": "LockScreen",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "display": {
+    "backgroundColor": "#000000"
+  },
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.exchange"
+    },
+    {
+      "name": "system.folme"
+    },
+    {
+      "name": "system.internal.settings"
+    },
+    {
+      "name": "system.brightness"
+    },
+    {
+      "name": "system.messageChannel"
+    },
+    {
+      "name": "system.internal.dial"
+    },
+    {
+      "name": "service.internal.account"
+    },
+    {
+      "name": "system.fetch"
+    },
+    {
+      "name": "system.request"
+    },
+    {
+      "name": "system.zip"
+    },
+    {
+      "name": "system.file"
+    },
+    {
+      "name": "system.microphone"
+    },
+    {
+      "name": "system.wifi"
+    },
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "service.internal.miot"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "imageCache": 6291456
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/edit": {
+        "component": "index"
+      }
+    }
+  }
+}

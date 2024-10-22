@@ -1,0 +1,70 @@
+{
+  "package": "com.application.x4b.album",
+  "name": "album",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.folme"
+    },
+    {
+      "name": "service.internal.miot"
+    },
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.device"
+    },
+    {
+      "name": "system.exchange"
+    },
+    {
+      "name": "system.network"
+    },
+    {
+      "name": "system.internal.settings"
+    },
+    {
+      "name": "service.internal.account"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "microFmkMode": true,
+    "imageCache": 5242880,
+    "designWidth": 800
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/manual": {
+        "component": "index"
+      },
+      "pages/screenSaver": {
+        "component": "index"
+      },
+      "pages/empty": {
+        "component": "index"
+      },
+      "pages/preview": {
+        "component": "index"
+      },
+      "pages/upload": {
+        "component": "index"
+      }
+    }
+  }
+}

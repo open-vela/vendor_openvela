@@ -1,0 +1,7 @@
+originType=cmd
+toolkit=1.1.1-imagebin-dev.2
+timeStamp=2024-05-09T12:07:02.951Z
+node=v16.20.2
+platform=linux
+arch=x64
+component=true

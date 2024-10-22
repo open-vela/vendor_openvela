@@ -1,0 +1,7 @@
+originType=cmd
+toolkit=1.0.19
+timeStamp=2024-04-19T11:51:37.936Z
+node=v18.18.0
+platform=darwin
+arch=x64
+component=true

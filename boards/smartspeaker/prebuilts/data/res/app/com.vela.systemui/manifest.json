@@ -1,0 +1,27 @@
+{
+    "package":"com.vela.systemui",
+    "name":"systemui",
+    "appType": "NATIVE",
+    "versionName":"1.0.0",
+    "versionCode":1,
+    "icon":"launch.png",
+    "execfile" : "wapp",
+    "activities":[
+    ],
+    "services": [
+        {
+            "name": "SystemUiService",
+            "priority": "persistent",
+            "intent-filter": {
+                "actions": [
+                    "action.system.BOOT_READY"
+                ]
+            }
+        }
+    ],
+    "features": [
+      {
+          "name": "system.messageChannel"
+      }
+    ]
+}

@@ -1,0 +1,153 @@
+{
+  "package": "com.xiaomi.smarthome.x4b",
+  "name": "smarthome",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1200,
+  "icon": "/common/logo.png",
+  "simulationVersion": "default",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.exchange"
+    },
+    {
+      "name": "system.fetch"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "service.mihome"
+    },
+    {
+      "name": "service.internal.audiosync"
+    },
+    {
+      "name": "service.internal.audiofocus"
+    },
+    {
+      "name": "system.serviceUtil"
+    },
+    {
+      "name": "system.internal.micamera"
+    },
+    {
+      "name": "system.request"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "debug": true
+  },
+  "router": {
+    "entry": "main",
+    "pages": {
+      "main": {
+        "component": "index"
+      },
+      "Camera": {
+        "component": "index"
+      },
+      "Camera/Show": {
+        "component": "index"
+      },
+      "Camera/OtherState": {
+        "component": "index"
+      },
+      "Camera/Pincode": {
+        "component": "index"
+      },
+      "Doorbell/Show": {
+        "component": "index"
+      },
+      "DevSettings/ModeSel": {
+        "component": "index"
+      },
+      "DevSettings/MoreSwitch": {
+        "component": "index"
+      },
+      "DevSettings/RangeSet": {
+        "component": "index"
+      },
+      "Component/Template/device": {
+        "component": "device"
+      },
+      "Component/Template/scene": {
+        "component": "scene"
+      },
+      "Alarm": {
+        "component": "index"
+      }
+    },
+    "widgets": {
+      "Component/Widgets/device0": {
+        "component": "device0"
+      },
+      "Component/Widgets/device3": {
+        "component": "device3"
+      },
+      "Component/Widgets/device4": {
+        "component": "device4"
+      },
+      "Component/Widgets/device5": {
+        "component": "device5"
+      },
+      "Component/Widgets/device6": {
+        "component": "device6"
+      },
+      "Component/Widgets/device7": {
+        "component": "device7"
+      },
+      "Component/Widgets/device8": {
+        "component": "device8"
+      },
+      "Component/Widgets/device9": {
+        "component": "device9"
+      },
+      "Component/Widgets/device10": {
+        "component": "device10"
+      },
+      "Component/Widgets/device11": {
+        "component": "device11"
+      },
+      "Component/Widgets/device12": {
+        "component": "device12"
+      },
+      "Component/Widgets/device13": {
+        "component": "device13"
+      },
+      "Component/Widgets/device14": {
+        "component": "device14"
+      },
+      "Component/Widgets/device15": {
+        "component": "device15"
+      },
+      "Component/Widgets/device404": {
+        "component": "device404"
+      },
+      "Component/Widgets/scene": {
+        "component": "scene"
+      }
+    }
+  },
+  "minAPILevel": 1,
+  "packageInfo": {
+    "originType": "cmd",
+    "toolkit": "1.1.0",
+    "timeStamp": "2024-04-10T08:21:07.754Z",
+    "node": "v16.14.0",
+    "platform": "linux",
+    "arch": "x64",
+    "component": true
+  }
+}

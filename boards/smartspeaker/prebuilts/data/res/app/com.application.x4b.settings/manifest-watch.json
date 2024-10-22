@@ -1,0 +1,140 @@
+{
+  "package": "com.application.x4b.settings",
+  "name": "vela-demo-1",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "display": {
+    "backgroundColor": "#000000"
+  },
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.exchange"
+    },
+    {
+      "name": "system.internal.settings"
+    },
+    {
+      "name": "system.messageChannel"
+    },
+    {
+      "name": "service.internal.miot"
+    },
+    {
+      "name": "system.bluetooth"
+    },
+    {
+      "name": "system.bluetooth.bt"
+    },
+    {
+      "name": "system.bluetooth.bt.a2dpsink"
+    },
+    {
+      "name": "system.brightness"
+    },
+    {
+      "name": "service.internal.account"
+    },
+    {
+      "name": "system.internal.ota"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 800,
+    "imageCache": 1048576
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index"
+      },
+      "pages/update": {
+        "component": "index"
+      },
+      "pages/update/updateLog": {
+        "component": "index"
+      },
+      "pages/about": {
+        "component": "index"
+      },
+      "pages/screenBrightness": {
+        "component": "index"
+      },
+      "pages/wakeUp": {
+        "component": "index"
+      },
+      "pages/factoryReset": {
+        "component": "index"
+      },
+      "pages/familyVoice": {
+        "component": "index"
+      },
+      "pages/about/operationHelp": {
+        "component": "index"
+      },
+      "pages/about/privacyAgreement": {
+        "component": "index"
+      },
+      "pages/about/userAgreement": {
+        "component": "index"
+      },
+      "pages/about/certificationInformation": {
+        "component": "index"
+      },
+      "pages/factoryReset/factoryResetConfirm": {
+        "component": "index"
+      },
+      "pages/nightMode": {
+        "component": "index"
+      },
+      "pages/bluetooth": {
+        "component": "index"
+      },
+      "pages/bluetooth/detail": {
+        "component": "index"
+      },
+      "pages/network": {
+        "component": "index"
+      },
+      "pages/network/detail": {
+        "component": "index"
+      },
+      "pages/network/security": {
+        "component": "index"
+      },
+      "pages/network/remove": {
+        "component": "index"
+      },
+      "pages/network/remove/confirm": {
+        "component": "index"
+      },
+      "pages/account": {
+        "component": "index"
+      },
+      "pages/account/confirm": {
+        "component": "index"
+      },
+      "pages/authority": {
+        "component": "index"
+      },
+      "pages/revoke": {
+        "component": "index"
+      },
+      "pages/revoke/secondInquiry": {
+        "component": "index"
+      },
+      "pages/lockScreen/list": {
+        "component": "index"
+      }
+    }
+  }
+}

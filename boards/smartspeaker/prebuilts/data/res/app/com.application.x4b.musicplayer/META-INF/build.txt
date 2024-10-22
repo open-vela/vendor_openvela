@@ -1,0 +1,7 @@
+originType=cmd
+toolkit=1.0.20-beta.7
+timeStamp=2024-05-09T10:58:34.213Z
+node=v18.19.1
+platform=linux
+arch=x64
+component=true
