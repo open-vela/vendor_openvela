@@ -1,0 +1,16 @@
+sn=44493/VELA01111
+model=L17A
+appid=000000000000000001
+version=1.90.33
+channel=release
+uid=000000001
+miot_did=0000000001
+miot_sessionid=00000_0000000000_0000000000000000001
+miot_token=0
+device_id=ffffffff-ffff-ffff-0000-ffffffffffff
+bt_mac=F0:E0:DE:AD:BE:EF
+bt_name=VELA Sound-1111
+mac=E0:E0:DE:AD:BE:EF
+request_access_token={}
+get_mico_token=0
+mibrain_level get={"level":"product"}

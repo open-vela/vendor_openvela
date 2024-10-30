@@ -24,23 +24,39 @@
 
 #include <nuttx/arch.h>
 #include <nuttx/board.h>
-#include <nuttx/sensors/goldfish_gps.h>
+#include <nuttx/lib/modlib.h>
+#ifdef CONFIG_SENSORS_GOLDFISH_GNSS
+#include <nuttx/sensors/goldfish_gnss.h>
+#endif
+#ifdef CONFIG_SENSORS_GOLDFISH_SENSOR
 #include <nuttx/sensors/goldfish_sensor.h>
+#endif
+#include <nuttx/pci/pci_ep_test.h>
 #include <nuttx/video/goldfish_camera.h>
+#include <nuttx/video/vnc.h>
+#include <nuttx/input/ff_dummy.h>
 
-#ifdef CONFIG_ARCH_ARM
-#  include "arm_cpu_psci.h"
-#endif
-#ifdef CONFIG_ARCH_ARM64
-#  include "arm64_cpu_psci.h"
-#endif
+#include <debug.h>
 
 #ifdef CONFIG_ARCH_TRUSTZONE_SECURE
 #include "gic.h"
 #include "sm.h"
 #endif
 
+#if defined(CONFIG_SMP) && defined(CONFIG_VELA_BL)
+#include "arm.h"
+#endif
+
 #include "board.h"
+#include "sched/sched.h"
+
+/****************************************************************************
+ * Pre-processor Definitions
+ ****************************************************************************/
+
+/* This set of all CPUs */
+
+#define SCHED_ALL_CPUS           ((1 << CONFIG_SMP_NCPUS) - 1)
 
 /****************************************************************************
  * Public Functions
@@ -96,12 +112,24 @@ void board_late_initialize(void)
   goldfish_camera_initialize();
 #endif
 
-#ifdef CONFIG_SENSORS_GOLDFISH_GPS
-  goldfish_gps_init(0, 1);
+#ifdef CONFIG_SENSORS_GOLDFISH_GNSS
+  goldfish_gnss_init(0, 1);
 #endif
 
 #ifdef CONFIG_SENSORS_GOLDFISH_SENSOR
   goldfish_sensor_init(0, 1);
+#endif
+
+#ifdef CONFIG_VNCSERVER
+  vnc_fb_register(0);
+#endif
+
+#ifdef CONFIG_PCI_EPF_TEST
+  pci_register_epf_test_device("qemu_epc");
+#endif
+
+#ifdef CONFIG_FF_DUMMY
+  ff_dummy_initialize(0);
 #endif
 
   board_init_rptun();
@@ -114,34 +142,78 @@ int board_app_initialize(uintptr_t arg)
 }
 
 #ifdef CONFIG_BOARDCTL_BOOT_IMAGE
+
+#  ifdef CONFIG_VELA_TEE
+volatile uint32_t g_ap_entry;
+#  endif
+
+#  if defined(CONFIG_SMP) && defined(CONFIG_VELA_BL)
+static int smp_call_func(void *arg)
+{
+  void  *entry = arg; /* tee entry */
+  uint32_t *regs = up_current_regs();
+
+  DEBUGASSERT(up_interrupt_context());
+  regs[REG_PC] = (uint32_t)entry;
+
+  /* We are about to enter the tee entry, and clear thumb execution state */
+
+  if (!((uint32_t)entry & 1))
+    {
+      regs[REG_CPSR] &= ~PSR_T_BIT;
+    }
+
+  return OK;
+}
+#  endif
+
+#ifdef CONFIG_ARMV7A_SMP_BUSY_WAIT
+volatile uint32_t *g_smp_busy_wait =
+(uint32_t *)CONFIG_ARMV7A_SMP_BUSY_WAIT_FLAG_ADDR;
+#endif
+
 int board_boot_image(const char *path, uint32_t hdr_size)
 {
   int ret;
-  struct elf_loadinfo_s loadinfo;
+  struct mod_loadinfo_s loadinfo;
 
   binfo("board_boot_image %s hdr_size %" PRIu32 "\n", path, hdr_size);
 
   /* Initialize the ELF library to load the program binary. */
 
-  ret = elf_init(path, &loadinfo);
+  ret = modlib_initialize(path, &loadinfo);
   if (ret < 0)
     {
-      berr("Failed to elf_init: %d\n", ret);
+      berr("Failed to modlib_initialize: %d\n", ret);
       return ret;
     }
 
   /* Load the program binary */
 
-  ret = elf_load(&loadinfo);
+  ret = modlib_load(&loadinfo);
   if (ret < 0)
     {
-      berr("Failed to elf_load: %d\n", ret);
+      berr("Failed to modlib_load: %d\n", ret);
       return ret;
     }
 
+  /* Reset busy wait status */
+
+#ifdef CONFIG_ARMV7A_SMP_BUSY_WAIT
+  *g_smp_busy_wait = 0;
+  SP_DSB();
+#endif
+
 #ifdef CONFIG_VELA_TEE
-  CP15_SET(SCR, CP15_GET(SCR) | SCR_NS);
+  g_ap_entry = loadinfo.ehdr.e_entry;
 #else
+#  if defined(CONFIG_SMP) && defined(CONFIG_VELA_BL)
+  DEBUGASSERT(this_cpu() == 0);
+  nxsched_smp_call(SCHED_ALL_CPUS & (SCHED_ALL_CPUS << 1),
+                   (nxsched_smp_call_t)smp_call_func,
+                   (void *)loadinfo.ehdr.e_entry, false);
+#  endif
+
   ((start_t)loadinfo.ehdr.e_entry)();
 #endif
 
@@ -156,7 +228,7 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 #ifdef CONFIG_BOARDCTL_POWEROFF
 int board_power_off(int status)
 {
-  psci_sys_poweroff();
+  up_systempoweroff();
   return 0;
 }
 #endif
@@ -164,7 +236,7 @@ int board_power_off(int status)
 #ifdef CONFIG_BOARDCTL_RESET
 int board_reset(int status)
 {
-  psci_sys_reset();
+  up_systemreset();
   return 0;
 }
 #endif

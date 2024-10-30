@@ -1,0 +1,13 @@
+{
+	"instances" :
+	{
+		"0" :
+		{
+			"emergency_mode" : false,
+			"modem_technoloy" : 32,
+			"network_selection_mode" : 0,
+			"operator_numeric" : "310260",
+			"preferred_network_mode" : 34
+		}
+	}
+}

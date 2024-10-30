@@ -21,6 +21,11 @@ config VELA_TEE
 	---help---
 		vela qemu tee
 
+config VELA_DROID
+	bool "VELA QEMU DROID"
+	---help---
+		vela qemu droid
+
 endchoice
 
 if ARCH_BOARD_CUSTOM
