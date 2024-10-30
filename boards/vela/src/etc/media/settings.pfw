@@ -1,0 +1,124 @@
+domain: SpeakerDomain
+	conf: sco
+		ALL
+			AvailableDevices Includes sco
+			UsingDevices     Includes sco
+		FFmpegCommand = pcm0p,set_parameter,set_scenario=sco;MixSpeaker,weights,0 0 0 0 0 0 0 1;
+	conf: music
+		ALL
+		FFmpegCommand = pcm0p,set_parameter,set_scenario=music;MixSpeaker,weights,1 1 1 1 1 1 1 0;
+
+domain: SCOrxDomain
+	conf: enable
+		ALL
+			AvailableDevices Includes sco
+			UsingDevices     Includes sco
+		FFmpegCommand = SCOrx,sample_rate,%HFPSampleRate%;SelSCO,map,0;
+	conf: disable
+		ALL
+		FFmpegCommand = SelSCO,map,-1;
+
+domain: PlayDomain
+	conf: a2dp
+		AvailableDevices Includes a2dp
+		FFmpegCommand = SelPlay,map,-1 0;
+	conf: speaker
+		ALL
+		FFmpegCommand = SelPlay,map,0 -1;
+
+domain: AlarmDomain
+	conf: both
+		AvailableDevices Includes a2dp
+		FFmpegCommand = SelAlarm,map,0 0;
+	conf: speaker
+		ALL
+		FFmpegCommand = SelAlarm,map,0 -1;
+
+domain: SCOtxDomain
+	conf: enable
+		ALL
+			AvailableDevices Includes sco
+			UsingDevices     Includes sco
+		FFmpegCommand = SCOtx,sample_rate,%HFPSampleRate%;SCOtx,start,;
+	conf: default
+		ALL
+		FFmpegCommand = SCOtx,stop,;
+
+domain: MicDomain
+	conf: phone
+		ALL
+			UsingDevices     Includes mic
+			AvailableDevices Includes sco
+			UsingDevices     Includes sco
+			AudioMode        Is       phone
+		FFmpegCommand = pcm0c,start,;SelCap,map,-1 -1 0;
+	conf: capture
+		UsingDevices Includes mic
+		FFmpegCommand = pcm0c,start,;SelCap,map,0 0 -1;
+	conf: off
+		ALL
+		FFmpegCommand = pcm0c,stop,;
+
+domain: IncallVolumeDomain
+	conf: X
+		AudioMode Is normal
+		FFmpegCommand = ;
+	conf: index-0
+		SCOVolume In 0
+		FFmpegCommand = VolSCO,volume,0;
+	conf: index-%SCOVolume
+		SCOVolume In [1,9]
+		FFmpegCommand = VolSCO,volume,10^(-4*(10-%SCOVolume%)/20);
+	conf: index-10
+		SCOVolume In 10
+		FFmpegCommand = VolSCO,volume,1;
+
+domain: TTSVolumeDomain
+	conf: X
+		AudioMode Is phone
+		FFmpegCommand = ;
+	conf: index-0
+		MusicVolume In 0
+		FFmpegCommand = VolSCO,volume,0;
+	conf: index-%MusicVolume
+		MusicVolume In [1,9]
+		FFmpegCommand = VolSCO,volume,10^(-4*(10-%MusicVolume%)/20);
+	conf: index-10
+		MusicVolume In 10
+		FFmpegCommand = VolSCO,volume,1;
+
+domain: RingVolumeDomain
+	conf: X
+		ANY
+			MuteMode   Is on
+			RingVolume In 0
+		FFmpegCommand = VolRing,volume,0;
+	conf: index-%RingVolume
+		RingVolume In [1,9]
+		FFmpegCommand = VolRing,volume,10^(-4*(10-%RingVolume%)/20);
+	conf: index-10
+		RingVolume In 10
+		FFmpegCommand = VolRing,volume,1;
+
+domain: MediaVolumeDomain
+	conf: X
+		MusicVolume In 0
+		FFmpegCommand = VolMedia,volume,0;
+	conf: index-%MusicVolume
+		MusicVolume In [1,9]
+		FFmpegCommand = VolMedia,volume,10^(-4*(10-%MusicVolume%)/20);
+	conf: 10
+		MusicVolume In 10
+		FFmpegCommand = VolMedia,volume,1;
+
+domain: AlarmVolumeDomain
+	conf: X
+		AlarmVolume In 0
+		FFmpegCommand = VolAlarm,volume,0;
+	conf: index-%AlarmVolume
+		AlarmVolume In [1,9]
+		FFmpegCommand = VolAlarm,volume,10^(-4*(10-%AlarmVolume%)/20);
+	conf: 10
+		AlarmVolume In 10
+		FFmpegCommand = VolAlarm,volume,1;
+

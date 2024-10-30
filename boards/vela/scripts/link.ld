@@ -33,6 +33,7 @@ SECTIONS
 {
   .text : {
        _stext = .;            /* Text section */
+       __text_start = .;
        *(.vectors)
        *(.text*)
        *(.fixup)
@@ -69,6 +70,7 @@ SECTIONS
        _srodata = .;          /* Read-only data */
        *(.rodata*)
        *(.data.rel.ro*)
+       KEEP(*(SORT(.scattered_array*)));
        . = ALIGN(4096);
        _erodata = .;
   } > ROM

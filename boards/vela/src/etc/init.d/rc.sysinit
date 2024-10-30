@@ -1,5 +1,5 @@
 /****************************************************************************
- * vendor/sim/boards/vela/src/etc/init.d/rc.sysinit
+ * vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -50,26 +50,4 @@ mount -t fatfs /dev/virtblk1 /data
 
 #ifndef CONFIG_NSH_DISABLE_TIMEDATECTL
 timedatectl set-timezone Asia/Shanghai
-#endif
-
-#ifdef CONFIG_RILD
-rild &
-#endif
-
-#ifdef CONFIG_DBUS_DAEMON
-dbusdaemon --system --nopidfile --nofork &
-#ifdef CONFIG_DBUS_TEST
-dbusdaemon --session --nopidfile --nofork &
-#endif
-#endif
-
-#ifdef CONFIG_OFONO
-#ifdef CONFIG_OFONO_RILMODEM
-set OFONO_RIL_DEVICE ril
-set OFONO_RIL_NUM_SIM_SLOTS 1
-set OFONO_RIL_RAT_LTE 1
-set OFONO_RIL_TRACE 1
-set OFONO_GPRS_CONTEXT_TYPE_SUPPORT internet,ims
-#endif
-ofonod &
 #endif

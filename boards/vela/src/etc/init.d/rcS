@@ -1,5 +1,5 @@
 /****************************************************************************
- * vendor/sim/boards/vela/src/etc/init.d/rcS
+ * vendor/openvela/boards/vela/src/etc/init.d/rcS
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -28,8 +28,16 @@ set +e
 kvdbd &
 #endif
 
+#ifdef CONFIG_DFX_SERVICE
+dfxdaemon &
+#endif
+
 #ifdef CONFIG_ANDROID_SERVICEMANAGER
 servicemanager &
+#endif
+
+#ifdef CONFIG_CPC_SERVICEMANAGER
+cpcservicemanager &
 #endif
 
 #ifdef CONFIG_SYSTEM_ADBD
@@ -40,4 +48,58 @@ adbd &
 mediad &
 #endif
 
+#ifdef CONFIG_BLUETOOTH_SERVER
+bluetoothd &
+#endif
+
+#ifdef CONFIG_FS_HOSTFS
+mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
+#endif
+
+#ifdef CONFIG_FS_TMPFS
+mount -t tmpfs /tmp
+#endif
+
+#ifdef CONFIG_FS_FATFS
+mount -t fatfs  /dev/virtblk0 /data
+#endif
+
+#if defined(CONFIG_FS_RPMSGFS) && defined(CONFIG_VELA_TEE)
+mount -t rpmsgfs -o cpu=ap,fs=/data /data
+#endif
+
+#ifdef CONFIG_OPTEE_OS
+opteed &
+#endif
+
 #include "rcS.last"
+
+#ifdef CONFIG_VELA_TEE
+boot /host/vela_ap.elf
+#endif
+
+#ifdef CONFIG_VELA_BL
+boot /host/vela_tee.elf
+#endif
+
+#ifdef CONFIG_RILD
+rild &
+#endif
+
+#ifdef CONFIG_DBUS_DAEMON
+dbusdaemon --system --nopidfile --nofork &
+#ifdef CONFIG_DBUS_TEST
+dbusdaemon --session --nopidfile --nofork &
+#endif
+#endif
+
+#ifdef CONFIG_OFONO
+#ifdef CONFIG_OFONO_RILMODEM
+set OFONO_RIL_DEVICE ril
+set OFONO_RIL_NUM_SIM_SLOTS 1
+set OFONO_RIL_RAT_LTE 1
+set OFONO_RIL_TRACE 1
+set OFONO_GPRS_CONTEXT_TYPE_SUPPORT internet,ims
+#endif
+ofonod &
+#endif
