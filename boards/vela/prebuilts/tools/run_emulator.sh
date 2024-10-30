@@ -26,13 +26,21 @@ if [ ! -e ${NUTTX_BIN} ]; then
   echo "./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap"
   echo "[aarch64]"
   echo "./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap"
+  echo "[x86_64]"
+  echo "./build.sh vendor/openvela/boards/vela/configs/goldfish-x86_64-ap"
   exit
 fi
 
 AVD_HOME="${HOME}/.vela/vvd"
 AVD_NAME="Vela_Generic_Device"
 AVD_DISPLAY_NAME=$(echo ${AVD_NAME} | tr '_' ' ')
-AVD_PATH="${AVD_HOME}/${AVD_NAME}.vvd"
+
+if [[ -n ${CUSTOM_AVD_SPACE} ]];then
+  AVD_PATH="${CUSTOM_AVD_SPACE}/${AVD_NAME}.vvd"
+else
+  AVD_PATH="${AVD_HOME}/${AVD_NAME}.vvd"
+fi
+
 AVD_PATH_REL="avd/${AVD_NAME}.vvd"
 AVD_INI="${AVD_HOME}/${AVD_NAME}.ini"
 AVD_CONFIG_INI="${AVD_PATH}/config.ini"
@@ -50,6 +58,9 @@ if [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, ARM aarch64')
 elif [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 32-bit LSB executable, ARM')" ]; then
   AVD_ABI="armeabi-v7a"
   AVD_ARCH="arm"
+elif [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, x86-64')" ]; then
+  AVD_ABI="x86_64"
+  AVD_ARCH="x86_64"
 else
   echo "Invalid NuttX binary."
 fi
@@ -91,11 +102,7 @@ runtime.network.speed = full
 showDeviceFrame = yes
 skin.dynamic = yes
 skin.name = xiaomi_smart_screen_10
-skin.path = ${TOP_DIR}/prebuilts/emulator/skins/xiaomi_smart_screen_10
-EOF
-
-cat << EOF > ${HOME}/.android/advancedFeatures.ini
-ModemSimulator = on
+skin.path = ${TARGETDIR}/prebuilts/tools/xiaomi_smart_screen_10
 EOF
 
 QEMU_OPTION="-qemu"
@@ -119,17 +126,10 @@ if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
 fi
 
 QEMU_OPTION="${QEMU_OPTION} \
--drive index=0,id=system,if=none,format=raw,file=${TOP_DIR}/nuttx/vela_system.bin \
--device virtio-blk-device,bus=virtio-mmio-bus.0,drive=system \
--drive index=1,id=userdata,if=none,format=raw,file=${AVD_PATH}/vela_data.bin \
--device virtio-blk-device,bus=virtio-mmio-bus.1,drive=userdata \
--device virtio-snd,bus=virtio-mmio-bus.2 \
--allow-host-audio -semihosting"
+-netdev user,id=network,net=10.0.2.0/24,dhcpstart=10.0.2.16 \
+-device virtio-net-device,netdev=network,bus=virtio-mmio-bus.4 \
+-device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting"
 
-${EMULATOR_BIN} -vela \
-  -avd ${AVD_NAME} \
-  -show-kernel \
-  -verbose \
-  -no-system \
-  -no-data \
-  $@ ${QEMU_OPTION}
+cp -a ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/tools/modem_simulator ${AVD_PATH}/
+
+${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel $@ ${QEMU_OPTION}

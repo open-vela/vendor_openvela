@@ -1,0 +1,20 @@
+ExclusiveCriterion AudioMode        : normal phone
+InclusiveCriterion UsingDevices     : mic sco = mic
+InclusiveCriterion AvailableDevices : a2dp sco
+NumericalCriterion HFPSampleRate    : 8000 16000 = 8000
+InclusiveCriterion ActiveStreams    : Ring0 Music0 Music1 Media0 Alarm0 Enforced0 cap movie picture
+ExclusiveCriterion Ring Info Notify Health : amovie_async@Ring
+ExclusiveCriterion Music Record            : amovie_async@Music
+ExclusiveCriterion Sport                   : amovie_async@Media
+ExclusiveCriterion Alarm                   : amovie_async@Alarm
+ExclusiveCriterion Enforced                : amovie_async@Enforced
+ExclusiveCriterion Video                   : movie_async@Video
+ExclusiveCriterion Video0                  : movie_async@Video0
+ExclusiveCriterion VideoSink               : moviesink_async
+ExclusiveCriterion AudioSink cap TalkCap   : amoviesink_async
+ExclusiveCriterion PictureSink             : vmoviesink_async
+ExclusiveCriterion persist.media.MuteMode    MuteMode                                        : off on = off
+NumericalCriterion persist.media.SCOVolume   SCOVolume                                       : [0,10] = 5
+NumericalCriterion persist.media.RingVolume  RingVolume NotifyVolume HealthVolume InfoVolume : [0,10] = 5
+NumericalCriterion persist.media.MediaVolume RecordVolume TTSVolume SportVolume MusicVolume  : [0,10] = 5
+NumericalCriterion persist.media.AlarmVolume AlarmVolume                                     : [0,10] = 5

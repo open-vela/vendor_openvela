@@ -18,6 +18,8 @@
  *
  ****************************************************************************/
 
+#include <nuttx/config.h>
+
 OUTPUT_ARCH(aarch64)
 
 ENTRY(__start)
@@ -30,6 +32,20 @@ PHDRS
 SECTIONS
 {
   . = 0x40280000;  /* uboot load address */
+
+#ifdef CONFIG_MM_KASAN_GLOBAL
+  .kasan.unused : {
+    *(.data..LASANLOC*)
+  }
+  .kasan.global : {
+    KEEP (*(.data..LASAN0))
+    KEEP (*(.data.rel.local..LASAN0))
+  }
+  .kasan.shadows : {
+    *(.kasan.shadows)
+  }
+#endif
+
   _start = .;
   .text : {
         _stext = .;            /* Text section */
@@ -61,6 +77,11 @@ SECTIONS
   . = ALIGN(4096);
   _etext = .; /* End_1 of .text */
   _sztext = _etext - _stext;
+
+  _sload = .;
+  . += 1048576;
+  _eload = .;
+  _szload = _eload - _sload;
 
   . = ALIGN(4096);
   .rodata : {

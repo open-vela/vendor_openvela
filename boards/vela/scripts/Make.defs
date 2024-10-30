@@ -31,6 +31,16 @@ include $(TOPDIR)/arch/arm/src/armv7-a/Toolchain.defs
 LDSCRIPT = link.ld
 endif
 
+ifeq ($(CONFIG_ARCH_ARMV8M),y)
+include $(TOPDIR)/arch/arm/src/armv8-m/Toolchain.defs
+LDSCRIPT = flashboot_armv8m.ld
+endif
+
+ifeq ($(CONFIG_ARCH_X86_64),y)
+include $(TOPDIR)/arch/x86_64/src/intel64/Toolchain.defs
+LDSCRIPT = qemu.ld
+endif
+
 ARCHSCRIPT += $(BOARD_DIR)$(DELIM)scripts$(DELIM)$(LDSCRIPT)
 
 CFLAGS := $(ARCHCFLAGS) $(ARCHOPTIMIZATION) $(ARCHCPUFLAGS) $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRAFLAGS) -pipe
@@ -45,14 +55,6 @@ AFLAGS := $(CFLAGS) -D__ASSEMBLY__
 NXFLATLDFLAGS1 = -r -d -warn-common
 NXFLATLDFLAGS2 = $(NXFLATLDFLAGS1) -T$(TOPDIR)$(DELIM)binfmt$(DELIM)libnxflat$(DELIM)gnu-nxflat-pcrel.ld -no-check-sections
 LDNXFLATFLAGS = -e main -s 2048
-
-# ELF module definitions
-
-CELFFLAGS = $(CFLAGS) -mlong-calls # --target1-abs
-CXXELFFLAGS = $(CXXFLAGS) -mlong-calls # --target1-abs
-
-LDELFFLAGS = -r -e main
-LDELFFLAGS += -T $(call CONVERT_PATH,$(TOPDIR)/binfmt/libelf/gnu-elf.ld)
 
 EXTRA_LIBS += $(wildcard $(shell readlink -f $(TOPDIR)/$(CONFIG_ARCH_BOARD_CUSTOM_DIR)/libs/$(CONFIG_ARCH_BOARD_CUSTOM_NAME))/*.a)
 

@@ -1,5 +1,5 @@
 /****************************************************************************
- * vendor/sim/boards/vela/src/etc/init.d/rcS.first
+ * vendor/openvela/boards/vela/src/etc/init.d/rcS.first
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with

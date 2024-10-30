@@ -1,0 +1,6 @@
+uname -a > /dev/log
+mount -t procfs /proc
+mount -t binfs /bin
+mount -t tmpfs /tmp
+mount -t romfs /dev/virtblk0 /system
+mount -t fatfs /dev/virtblk1 /data
