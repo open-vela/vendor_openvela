@@ -3,4 +3,8 @@
 libs
 .built
 .depend
+common/board
+common/etctmp.c
+common/etctmp/*
+common/sharedata/nvs.db
 Make.dep
