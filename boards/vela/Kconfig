@@ -1,0 +1,33 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+choice
+	prompt "Select subsystem"
+
+config VELA_AP
+	bool "VELA QEMU AP"
+	---help---
+		vela qemu ap
+
+config VELA_BL
+	bool "VELA QEMU BL"
+	---help---
+		vela qemu bootloader
+
+config VELA_TEE
+	bool "VELA QEMU TEE"
+	---help---
+		vela qemu tee
+
+config VELA_DROID
+	bool "VELA QEMU DROID"
+	---help---
+		vela qemu droid
+
+endchoice
+
+if ARCH_BOARD_CUSTOM
+
+endif

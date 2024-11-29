@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding='utf-8'?>
+<!-- -*- Mode: XML; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- -->
+<!DOCTYPE serviceproviders SYSTEM "serviceproviders.2.dtd">
+
+<!-- Authors:
+     2008 Antti Kaijanmäki <antti@kaijanmaki.net>
+     2009 Dan Williams <dcbw@redhat.com>
+     2011 Antti Kaijanmäki <antti@canonical.com>
+-->
+
+<!-- THIS WORK IS IN PUBLIC DOMAIN:
+The person or persons who have associated work with this document
+(the "Dedicator" or "Certifier") hereby either (a) certifies that, to the best
+of his knowledge, the work of authorship identified is in the public domain of
+the country from which the work is published, or (b) hereby dedicates whatever
+copyright the dedicators holds in the work of authorship identified below
+(the "Work") to the public domain. A certifier, moreover, dedicates any
+copyright interest he may have in the associated work, and for these purposes,
+is described as a "dedicator" below.
+
+A certifier has taken reasonable steps to verify the copyright status of this
+work. Certifier recognizes that his good faith efforts may not shield him from
+liability if in fact the work certified is not in the public domain.
+
+Dedicator makes this dedication for the benefit of the public at large and to
+the detriment of the Dedicator's heirs and successors. Dedicator intends this
+dedication to be an overt act of relinquishment in perpetuity of all present
+and future rights under copyright law, whether vested or contingent, in the
+Work. Dedicator understands that such relinquishment of all rights includes the
+relinquishment of all rights to enforce (by lawsuit or otherwise) those
+copyrights in the Work.
+
+Dedicator recognizes that, once placed in the public domain, the Work may be
+freely reproduced, distributed, transmitted, used, modified, built upon, or
+otherwise exploited by anyone for any purpose, commercial or non-commercial,
+and in any way, including by methods that have not yet been invented or
+conceived.
+-->
+
+<serviceproviders format="2.0">
+
+<!-- United States -->
+<country code="us">
+	<provider>
+		<name>T-Mobile</name>
+		<gsm>
+			<network-id mcc="310" mnc="026"/>
+			<network-id mcc="310" mnc="160"/>
+			<network-id mcc="310" mnc="200"/>
+			<network-id mcc="310" mnc="210"/>
+			<network-id mcc="310" mnc="220"/>
+			<network-id mcc="310" mnc="230"/>
+			<network-id mcc="310" mnc="240"/>
+			<network-id mcc="310" mnc="250"/>
+			<network-id mcc="310" mnc="260"/>
+			<network-id mcc="310" mnc="270"/>
+			<network-id mcc="310" mnc="310"/>
+			<network-id mcc="310" mnc="490"/>
+			<network-id mcc="310" mnc="580"/>
+			<network-id mcc="310" mnc="660"/>
+			<network-id mcc="310" mnc="800"/>
+
+			<voicemail>123</voicemail>
+			<apn value="fast.t-mobile.com">
+				<plan type="postpaid"/>
+				<usage type="internet"/>
+				<name>LTE</name>
+			</apn>
+			<apn value="ims">
+				<usage type="ims"/>
+				<name>ims</name>
+			</apn>
+		</gsm>
+	</provider>
+</country>
+
+</serviceproviders>

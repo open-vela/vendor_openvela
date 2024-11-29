@@ -1,0 +1,9 @@
+ro.build.codename=DEV
+ro.build.version.release=12.0.0
+ro.product.model=Emulator-Vela
+ro.product.device=Emulator-Vela
+ro.product.name=Emulator-Vela
+ro.product.brand=Vela
+ro.product.manufacturer=Xiaomi
+ro.product.board=Emulator
+ro.product.device.screenshape=2
