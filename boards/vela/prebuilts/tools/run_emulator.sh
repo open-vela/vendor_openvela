@@ -115,14 +115,9 @@ do
   fi
 done
 
-if [ ! -f ${TOP_DIR}/nuttx/vela_system.bin ]; then
-  echo "Copy vela_system.img"
-  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/system.img ${TOP_DIR}/nuttx/vela_system.bin
-fi
-
 if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   echo "Copy vela_data.img"
-  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/data.img ${AVD_PATH}/vela_data.bin
+  cp ${TOP_DIR}/nuttx/vela_data.bin ${AVD_PATH}/vela_data.bin
 fi
 
 if [ "$AVD_ARCH" == "x86_64" ]; then
