@@ -65,6 +65,11 @@ int board_init_app(void)
   struct oneshot_lowerhalf_s *os = NULL;
 #endif
 
+#ifdef CONFIG_PCI
+  /* Register the PCI bus drivers */
+  pci_register_drivers();
+#endif
+
 #ifdef CONFIG_FS_PROCFS
   /* Mount the procfs file system */
 
