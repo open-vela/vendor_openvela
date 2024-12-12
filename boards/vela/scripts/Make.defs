@@ -58,23 +58,28 @@ LDNXFLATFLAGS = -e main -s 2048
 
 EXTRA_LIBS += $(wildcard $(shell readlink -f $(TOPDIR)/$(CONFIG_ARCH_BOARD_CUSTOM_DIR)/libs/$(CONFIG_ARCH_BOARD_CUSTOM_NAME))/*.a)
 
-ifeq ($(CONFIG_VELA_AP),y)
 define POSTBUILD
-   $(Q)echo "Generating: vela_ap.bin";
-   cp nuttx vela_ap.elf;
-   cp nuttx vela_ap.bin;
+	$(Q)echo "Generating: vela_system.bin";
+	$(Q)genromfs -f ${TOPDIR}/vela_system.bin -d $(BOARD_DIR)/prebuilts/system;
+
+	$(Q)echo "Generating: vela_data.bin";
+	$(Q)dd if=/dev/zero of=${TOPDIR}/vela_data.bin bs=1M count=256;
+	$(Q)mkfs.fat ${TOPDIR}/vela_data.bin;
+	$(Q)mcopy -i ${TOPDIR}/vela_data.bin -sv $(BOARD_DIR)/prebuilts/data/* :: > /dev/null 2>&1;
+
+	$(Q)if [ x"${CONFIG_VELA_AP}" = x"y" ]; then \
+		echo "Generating: vela_ap.bin"; \
+		cp nuttx vela_ap.elf; \
+		cp nuttx vela_ap.bin; \
+		cp nuttx vela_ap.bin; \
+	elif [ x"${CONFIG_VELA_TEE}" = x"y" ]; then \
+		echo "Generating: vela_tee.bin"; \
+		cp nuttx vela_tee.elf; \
+		cp nuttx vela_tee.bin; \
+	elif [ x"${CONFIG_VELA_BL}" = x"y" ]; then \
+		echo "Generating: vela_bl.bin"; \
+		cp nuttx vela_bl.elf; \
+		cp nuttx.map vela_bl.map; \
+		cp nuttx.bin vela_bl.bin; \
+	fi
 endef
-else ifeq ($(CONFIG_VELA_TEE),y)
-define POSTBUILD
-   $(Q)echo "Generating: vela_tee.bin";
-   cp nuttx vela_tee.elf;
-   cp nuttx vela_tee.bin;
-endef
-else ifeq ($(CONFIG_VELA_BL),y)
-define POSTBUILD
-  $(Q)echo "Generating: vela_bl.bin";
-  cp nuttx vela_bl.elf;
-  cp nuttx.map vela_bl.map;
-  cp nuttx.bin vela_bl.bin;
-endef
-endif
