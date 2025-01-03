@@ -40,8 +40,8 @@
 #include <nuttx/rptun/rptun.h>
 #include <nuttx/serial/uart_rpmsg.h>
 
-#ifdef CONFIG_RPTUN_SECURE
-#include <nuttx/rptun/rptun_secure.h>
+#ifdef CONFIG_RPTUN_BMP
+#include <nuttx/rptun/rptun_bmp.h>
 #endif
 
 #ifdef CONFIG_ARCH_X86_64
@@ -345,19 +345,23 @@ static void rptun_setup_shmem(struct rptun_rsc_s *rsc)
  *
  ****************************************************************************/
 
-#ifdef CONFIG_RPTUN_SECURE
+#ifdef CONFIG_RPTUN_BMP
 static int qemu_rptun_init(void)
 {
   struct rptun_rsc_s *rsc = (struct rptun_rsc_s *)QEMU_SHMEM_ADDR;
   int ret = 0;
+  int cpuset;
+
+  CPU_ZERO(&cpuset);
+  CPU_SET(0, &cpuset);
 
 #if defined(CONFIG_VELA_TEE)
   rptun_setup_shmem(rsc);
-  ret = rptun_secure_init("ap", false, rsc,
-                          QEMU_SECURE_INTTERRUPT, QEMU_NOSECURE_INTTERRUPT);
+  ret = rptun_bmp_init("ap", false, rsc, QEMU_SECURE_INTTERRUPT,
+                       QEMU_NOSECURE_INTTERRUPT, cpuset);
 #elif defined(CONFIG_VELA_AP)
-  ret = rptun_secure_init("tee", true, rsc,
-                          QEMU_NOSECURE_INTTERRUPT, QEMU_SECURE_INTTERRUPT);
+  ret = rptun_bmp_init("tee", true, rsc, QEMU_NOSECURE_INTTERRUPT,
+                       QEMU_SECURE_INTTERRUPT, cpuset);
 #endif
 
   if (ret < 0)
@@ -391,7 +395,7 @@ void rpmsg_serialinit(void)
 
 int board_init_rptun(void)
 {
-#ifdef CONFIG_RPTUN_SECURE
+#ifdef CONFIG_RPTUN_BMP
   qemu_rptun_init();
 #endif
 

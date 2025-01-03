@@ -331,7 +331,7 @@ config_fd_err:
 
 int board_init_rptun(void)
 {
-#ifdef CONFIG_RPTUN_SECURE
+#ifdef CONFIG_RPTUN_BMP
   qemu_rptun_init();
 #endif
 
