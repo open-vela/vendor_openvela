@@ -47,6 +47,10 @@
 #include "arm.h"
 #endif
 
+#if defined(CONFIG_ARCH_ARMV7A)
+#include "arm_cpu_psci.h"
+#endif
+
 #include "board.h"
 #include "sched/sched.h"
 
@@ -206,8 +210,9 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
 #ifdef CONFIG_VELA_TEE
   g_ap_entry = loadinfo.ehdr.e_entry;
-#else
-#  if defined(CONFIG_SMP) && defined(CONFIG_VELA_BL)
+#elif defined(CONFIG_VELA_BL)
+
+#  if defined(CONFIG_SMP)
   DEBUGASSERT(this_cpu() == 0);
   nxsched_smp_call(SCHED_ALL_CPUS & (SCHED_ALL_CPUS << 1),
                    (nxsched_smp_call_t)smp_call_func,
@@ -215,6 +220,13 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 #  endif
 
   ((start_t)loadinfo.ehdr.e_entry)();
+#else
+  /* Amp mode support */
+
+  if (sched_getcpu() == 0)
+    {
+      psci_cpu_on(1, (uintptr_t)(void *)loadinfo.ehdr.e_entry);
+    }
 #endif
 
   /* board_boot_image will not return in this case.
