@@ -47,10 +47,10 @@ path=${AVD_PATH}
 path.rel=avd/${AVD_PATH_REL}
 EOF
 
-if [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, ARM aarch64')" ]; then
+if [ -n "$(file -bL ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, ARM aarch64')" ]; then
   AVD_ABI="arm64-v8a"
   AVD_ARCH="arm64"
-elif [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 32-bit LSB executable, ARM')" ]; then
+elif [ -n "$(file -bL ${NUTTX_BIN} | grep 'ELF 32-bit LSB executable, ARM')" ]; then
   AVD_ABI="armeabi-v7a"
   AVD_ARCH="arm"
 else
