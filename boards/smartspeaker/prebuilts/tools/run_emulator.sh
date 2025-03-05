@@ -127,8 +127,21 @@ if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   cp ${TOP_DIR}/vendor/openvela/boards/smartspeaker/prebuilts/image/vela_data.bin ${AVD_PATH}/
 fi
 
+if [ ! -v HOST_BIN_PATH ]; then
+  HOST_BIN_PATH="${TOP_DIR}/apps/bin"
+fi
+
+if [ ! -d ${HOST_BIN_PATH} ]; then
+  echo "Create ${HOST_BIN_PATH} for 9pfs bin mount"
+  mkdir -p ${HOST_BIN_PATH}
+else
+  echo "Using ${HOST_BIN_PATH} as 9pfs bin mount"
+fi
+
 QEMU_OPTION="${QEMU_OPTION} \
--device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting"
+-device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting \
+-fsdev local,security_model=none,id=fshostbin,path=${HOST_BIN_PATH} \
+-device virtio-9p-device,id=fs1,fsdev=fshostbin,mount_tag=bin"
 
 BIN_PATH=$(dirname ${NUTTX_BIN})
 cd "${BIN_PATH}"
