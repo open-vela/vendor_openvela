@@ -36,6 +36,7 @@ if(CONFIG_MEDIA_SERVER)
   add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/graph.conf)
   add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/criteria.txt)
   add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/settings.pfw)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/MiRemix.mp3)
 endif()
 
 if(CONFIG_MEDIA_SERVER)
