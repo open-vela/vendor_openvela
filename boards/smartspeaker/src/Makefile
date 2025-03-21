@@ -36,6 +36,7 @@ ifeq ($(CONFIG_MEDIA_SERVER),y)
   RCSRCS += etc/media/graph.conf
   RCRAWS += etc/media/criteria.txt
   RCRAWS += etc/media/settings.pfw
+  RCRAWS += etc/media/MiRemix.mp3
 endif
 
 ifeq ($(CONFIG_SYSTEM_PACKAGE_SERVICE), y)
