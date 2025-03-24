@@ -294,7 +294,7 @@ static int board_misc_init(void)
 
   int ret_did = -1, ret_key = -1;
   uint8_t did[MIIO_DID_LEN - 1] = {0}, key[MIIO_KEY_LEN] = {0};
-#ifdef CONFIG_OPTEE_OS
+#if defined(CONFIG_OPTEE_OS) && !defined(CONFIG_BUILD_KERNEL)
   ret_did = triad_load_did(did, 8);
   ret_key = triad_load_key(key, MIIO_KEY_LEN);
 #endif
