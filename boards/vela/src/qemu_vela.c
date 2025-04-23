@@ -72,11 +72,11 @@
 
 /* OpenAMP shared memory, this address must be not used by vela */
 
-#ifndef CONFIG_ARMV7A_SMP_BUSY_WAIT_FLAG_ADDR
-#  define CONFIG_ARMV7A_SMP_BUSY_WAIT_FLAG_ADDR 0x45000000
+#ifndef CONFIG_ARM_BUSY_WAIT_FLAG_ADDR
+#  define CONFIG_ARM_BUSY_WAIT_FLAG_ADDR 0x45000000
 #endif
 
-#define QEMU_SHMEM_ADDR              (CONFIG_ARMV7A_SMP_BUSY_WAIT_FLAG_ADDR + 0x4)
+#define QEMU_SHMEM_ADDR              (CONFIG_ARM_BUSY_WAIT_FLAG_ADDR + 0x4)
 
 #define FDT_PCI_TYPE_IO              0x01000000
 #define FDT_PCI_TYPE_MEM32           0x02000000

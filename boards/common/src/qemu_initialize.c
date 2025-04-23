@@ -167,9 +167,9 @@ static int smp_call_func(void *arg)
 }
 #  endif
 
-#ifdef CONFIG_ARMV7A_SMP_BUSY_WAIT
+#ifdef CONFIG_ARM_BUSY_WAIT
 volatile uint32_t *g_smp_busy_wait =
-(uint32_t *)CONFIG_ARMV7A_SMP_BUSY_WAIT_FLAG_ADDR;
+(uint32_t *)CONFIG_ARM_BUSY_WAIT_FLAG_ADDR;
 #endif
 
 int board_boot_image(const char *path, uint32_t hdr_size)
@@ -199,7 +199,7 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
   /* Reset busy wait status */
 
-#ifdef CONFIG_ARMV7A_SMP_BUSY_WAIT
+#ifdef CONFIG_ARM_BUSY_WAIT
   *g_smp_busy_wait = 0;
   SP_DSB();
 #endif
