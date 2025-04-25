@@ -1,5 +1,5 @@
 ############################################################################
-# vendor/qemu/boards/smartspeaker/prebuilts/tools/run_emulator.sh
+# vendor/openvela/boards/smartspeaker/prebuilts/tools/run_emulator.sh
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -26,9 +26,44 @@ if [ ! -e ${NUTTX_BIN} ]; then
   exit
 fi
 
+# default variables
+
 AVD_HOME="${HOME}/.vela/vvd"
 AVD_NAME="Speaker_Screen_$$"
 AVD_DISPLAY_NAME=$(echo ${AVD_NAME} | tr '_' ' ')
+
+INDEX_PROVIDED=false
+QEMU_OPTION="-qemu"
+ARG_OPTION=""
+
+# parse input arguments
+
+while [ $# -gt 0 ]; do
+  arg="$1"
+  echo "arg=$arg"
+
+  case "$arg" in
+    "-keep")
+      if [[ -n $2 ]]; then
+        AVD_NAME="$2"
+        INDEX_PROVIDED=true
+        shift 2
+      else
+        echo "Error: -keep requires a value."
+        exit 1
+      fi
+      ;;
+    "-qemu")
+      QEMU_OPTION=""
+      ARG_OPTION="${ARG_OPTION} ${arg}"
+      shift
+      ;;
+    *)
+      ARG_OPTION="${ARG_OPTION} ${arg}"
+      shift
+      ;;
+  esac
+done
 
 if [[ -n ${CUSTOM_AVD_SPACE} ]];then
   AVD_PATH="${CUSTOM_AVD_SPACE}/${AVD_NAME}.vvd"
@@ -97,35 +132,32 @@ skin.name = 800x480
 skin.path = _no_skin
 EOF
 
-QEMU_OPTION="-qemu"
+# coredump device
 
-for arg in "$@"
-do
-  echo "arg=$arg"
-  if [ $arg == "-qemu" ];
-    then QEMU_OPTION="";
-  fi
-done
-
-if [ -e ${TOP_DIR}/nuttx/coredump.core ]; then
-
-  core_format=$(file ${TOP_DIR}/nuttx/coredump.core)
+if [ -e ${AVD_PATH}/coredump.core ]; then
+  core_format=$(file ${AVD_PATH}/coredump.core)
   if [ -n "$(echo ${core_format} | grep 'core file')" ]; then
     timesamp=$(date +%Y%m%d%H%M%S)
-    mv ${TOP_DIR}/nuttx/coredump.core ${TOP_DIR}/nuttx/${timesamp}.core
-    dd if=/dev/zero of=${TOP_DIR}/nuttx/coredump.core bs=200M count=1
+    mv ${AVD_PATH}/coredump.core ${AVD_PATH}/${timesamp}.core
+    dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
     echo "A core file already exists. will be backed to ${timesamp}.core"
   fi
-
 else
   echo "Create a core file"
-  dd if=/dev/zero of=${TOP_DIR}/nuttx/coredump.core bs=200M count=1
+  dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
 fi
+
+QEMU_OPTION="${QEMU_OPTION} \
+  -drive index=2,id=vendor,if=none,format=raw,file=${AVD_PATH}/coredump.core"
+
+# hostfs relative to AVD
 
 if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   echo "Copy vela_data.bin"
   cp ${TOP_DIR}/vendor/openvela/boards/smartspeaker/prebuilts/image/vela_data.bin ${AVD_PATH}/
 fi
+
+# 9pfs device
 
 if [ ! -v HOST_BIN_PATH ]; then
   HOST_BIN_PATH="${TOP_DIR}/apps/bin"
@@ -139,13 +171,22 @@ else
 fi
 
 QEMU_OPTION="${QEMU_OPTION} \
--device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting \
--fsdev local,security_model=none,id=fshostbin,path=${HOST_BIN_PATH} \
--device virtio-9p-device,id=fs1,fsdev=fshostbin,mount_tag=bin"
+  -fsdev local,security_model=none,id=fshostbin,path=${HOST_BIN_PATH} \
+  -device virtio-9p-device,id=fs1,fsdev=fshostbin,mount_tag=bin"
+
+# arch specific
+
+QEMU_OPTION="${QEMU_OPTION} \
+  -smp 2 \
+  -device virtio-blk-device,bus=virtio-mmio-bus.4,drive=vendor \
+  -device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting \
+  -device virtio-gpu-device,xres=480,yres=800,bus=virtio-mmio-bus.5"
 
 BIN_PATH=$(dirname ${NUTTX_BIN})
 cd "${BIN_PATH}"
 
-${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel $@ ${QEMU_OPTION}
+${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel ${ARG_OPTION} ${QEMU_OPTION}
 
-rm -rf ${AVD_PATH} ${AVD_INI}
+if [[ "${INDEX_PROVIDED}" == false ]]; then
+    rm -rf "${AVD_PATH}" "${AVD_INI}"
+fi
