@@ -7,8 +7,8 @@
     ]
   },
   "name": "launcher",
-  "versionName": "1.0.3",
-  "versionCode": 3,
+  "versionName": "1.0.8",
+  "versionCode": 8,
   "minPlatformVersion": 1000,
   "icon": "/common/images/logo.png",
   "deviceTypeList": [
@@ -71,6 +71,18 @@
     },
     {
       "name": "service.internal.miot"
+    },
+    {
+      "name": "system.bluetooth"
+    },
+    {
+      "name": "system.bluetooth.bt.a2dpsink"
+    },
+    {
+      "name": "system.internal.ota"
+    },
+    {
+      "name": "service.miplay"
     }
   ],
   "config": {
@@ -93,7 +105,8 @@
         "launchMode": "singleTask"
       },
       "pages/detail": {
-        "component": "index"
+        "component": "index",
+        "launchMode": "singleTask"
       },
       "pages/add": {
         "component": "index"
