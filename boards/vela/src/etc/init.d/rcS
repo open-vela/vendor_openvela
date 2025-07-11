@@ -56,12 +56,11 @@ bluetoothd &
 mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
 #endif
 
-#ifdef CONFIG_FS_TMPFS
-mount -t tmpfs /tmp
-#endif
-
 #ifdef CONFIG_FS_FATFS
-mount -t fatfs  /dev/virtblk0 /data
+if [ ! -e /data ]
+then
+    mount -t fatfs  /dev/virtblk0 /data
+fi
 #endif
 
 #if defined(CONFIG_FS_RPMSGFS) && defined(CONFIG_VELA_TEE)
