@@ -5,6 +5,7 @@
 # You can then do "make savedefconfig" to generate a new defconfig file that includes your
 # modifications.
 #
+# CONFIG_ARCH_INTEL64_HAVE_PCID is not set
 # CONFIG_DEV_RANDOM is not set
 # CONFIG_LV_LOG_USE_TIMESTAMP is not set
 # CONFIG_LV_USE_ASSERT_MALLOC is not set
@@ -184,6 +185,7 @@ CONFIG_NSH_BUILTIN_APPS=y
 CONFIG_NSH_DISABLE_IFUPDOWN=y
 CONFIG_NSH_DISABLE_UNAME=y
 CONFIG_NSH_PROMPT_MAX=32
+CONFIG_NSH_PROMPT_STRING="openvela-ap> "
 CONFIG_PCI=y
 CONFIG_PCI_MSIX=y
 CONFIG_PCI_QEMU_EDU=y
