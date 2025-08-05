@@ -190,10 +190,10 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
   /* Load the program binary */
 
-  ret = modlib_load(&loadinfo);
+  ret = modlib_load_vma(&loadinfo, true);
   if (ret < 0)
     {
-      berr("Failed to modlib_load: %d\n", ret);
+      berr("Failed to modlib_load_vma: %d\n", ret);
       return ret;
     }
 
