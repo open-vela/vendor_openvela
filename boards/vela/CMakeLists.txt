@@ -43,6 +43,7 @@ nuttx_add_extra_library(${EXTRA_LIBS})
 
 set_property(GLOBAL PROPERTY LD_SCRIPT
                              "${NUTTX_BOARD_ABS_DIR}/scripts/${LD_SCRIPT_FILE}")
+<<<<<<< HEAD
 
 set(emulator_config_str
     [=[
@@ -117,3 +118,5 @@ elseif(CONFIG_VELA_BL)
     COMMAND cp nuttx.bin vela_bl.bin
     DEPENDS gen_images)
 endif()
+=======
+>>>>>>> ba71fd1 (First commit)
