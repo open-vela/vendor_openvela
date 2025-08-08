@@ -85,11 +85,7 @@ void qemu_board_initialize(void)
 }
 #endif
 
-<<<<<<< HEAD
 #ifdef CONFIG_ARCH_CHIP_GOLDFISH_ARM64
-=======
-#ifdef CONFIG_ARCH_CHIP_GOLDFISH
->>>>>>> ba71fd1 (First commit)
 void goldfish_board_initialize(void)
 {
 }
