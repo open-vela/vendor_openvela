@@ -115,9 +115,20 @@ do
   fi
 done
 
+<<<<<<< HEAD
 if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   echo "Copy vela_data.img"
   cp ${TOP_DIR}/nuttx/vela_data.bin ${AVD_PATH}/vela_data.bin
+=======
+if [ ! -f ${TOP_DIR}/nuttx/vela_system.bin ]; then
+  echo "Copy vela_system.img"
+  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/system.img ${TOP_DIR}/nuttx/vela_system.bin
+fi
+
+if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
+  echo "Copy vela_data.img"
+  cp ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/image/data.img ${AVD_PATH}/vela_data.bin
+>>>>>>> ba71fd1 (First commit)
 fi
 
 QEMU_OPTION="${QEMU_OPTION} \
