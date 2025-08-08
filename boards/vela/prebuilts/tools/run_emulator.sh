@@ -91,7 +91,7 @@ hw.lcd.density = 420
 hw.lcd.height = 1280
 hw.lcd.width = 720
 hw.mainKeys = no
-hw.ramSize = 512
+hw.ramSize = 1024
 hw.sdCard = no
 hw.sensors.orientation = yes
 hw.sensors.proximity = yes
@@ -131,10 +131,14 @@ if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
 >>>>>>> ba71fd1 (First commit)
 fi
 
+if [ "$AVD_ARCH" == "x86_64" ]; then
+QEMU_OPTION="${QEMU_OPTION} -cpu Skylake-Client,-hle,-rtm,-mpx"
+else
 QEMU_OPTION="${QEMU_OPTION} \
 -netdev user,id=network,net=10.0.2.0/24,dhcpstart=10.0.2.16 \
 -device virtio-net-device,netdev=network,bus=virtio-mmio-bus.4 \
 -device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting"
+fi
 
 cp -a ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/tools/modem_simulator ${AVD_PATH}/
 
