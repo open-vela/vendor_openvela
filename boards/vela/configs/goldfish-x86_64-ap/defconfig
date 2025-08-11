@@ -5,6 +5,7 @@
 # You can then do "make savedefconfig" to generate a new defconfig file that includes your
 # modifications.
 #
+# CONFIG_ARCH_INTEL64_HAVE_PCID is not set
 # CONFIG_DEV_RANDOM is not set
 # CONFIG_LV_LOG_USE_TIMESTAMP is not set
 # CONFIG_LV_USE_ASSERT_MALLOC is not set
@@ -116,10 +117,14 @@ CONFIG_LIB_JSONC_STACKSIZE=2048
 =======
 CONFIG_LIB_TINYXML2=y
 <<<<<<< HEAD
+<<<<<<< HEAD
 CONFIG_LINE_MAX=256
 >>>>>>> abec963 (openvela/configs: Replace `NSH_LINELEN` with `LINE_MAX`)
 =======
 >>>>>>> 764ab92 (goldfish: update goldfish-x86_64-ap defconfig)
+=======
+CONFIG_LINE_MAX=256
+>>>>>>> 9ffd986 (goldfish-x86_64-ap:fix starup mount issue)
 CONFIG_LV_BIN_DECODER_RAM_LOAD=y
 CONFIG_LV_CACHE_DEF_SIZE=8388608
 CONFIG_LV_DEF_REFR_PERIOD=16
@@ -190,6 +195,7 @@ CONFIG_NSH_BUILTIN_APPS=y
 CONFIG_NSH_DISABLE_IFUPDOWN=y
 CONFIG_NSH_DISABLE_UNAME=y
 CONFIG_NSH_PROMPT_MAX=32
+CONFIG_NSH_PROMPT_STRING="openvela-ap> "
 CONFIG_PCI=y
 CONFIG_PCI_MSIX=y
 CONFIG_PCI_QEMU_EDU=y
