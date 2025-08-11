@@ -65,14 +65,9 @@ int board_init_app(void)
   struct oneshot_lowerhalf_s *os = NULL;
 #endif
 
-#ifdef CONFIG_FS_PROCFS
-  /* Mount the procfs file system */
-
-  ret = nx_mount(NULL, "/proc", "procfs", 0, NULL);
-  if (ret < 0)
-    {
-      serr("ERROR: Failed to mount procfs at %s: %d\n", "/proc", ret);
-    }
+#ifdef CONFIG_PCI
+  /* Register the PCI bus drivers */
+  pci_register_drivers();
 #endif
 
 #ifdef CONFIG_ONESHOT
