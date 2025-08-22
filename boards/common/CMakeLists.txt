@@ -31,5 +31,9 @@ if(${CONFIG_MIPLAY})
   add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/miplay/mico_config)
 endif()
 
+if(CONFIG_DRIVERS_WIFI_SIM)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/wifi/bss)
+endif()
+
 add_subdirectory(src)
 target_include_directories(board PRIVATE include)
