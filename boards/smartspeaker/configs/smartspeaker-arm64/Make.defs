@@ -1,0 +1,40 @@
+############################################################################
+# openvela/boards/smartspeaker/configs/smartspeaker-arm64/Make.defs
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.  The
+# ASF licenses this file to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance with the
+# License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+############################################################################
+
+include ${TOPDIR}/.config
+
+include ${TOPDIR}/tools/Config.mk
+include $(BOARD_DIR)/scripts/Make.defs
+
+define POSTBUILD
+    $(Q)echo "Generating: vela_ap.bin"; \
+    cp nuttx vela_ap.elf;
+    cp nuttx.bin vela_ap.bin;
+    cp nuttx.map vela_ap.map;
+
+    $(Q)echo "Generating: vela_system.bin";
+    $(Q)genromfs -f ${TOPDIR}/vela_system.bin -d $(BOARD_DIR)/prebuilts/data/res;
+
+    $(Q)echo "Generating initial vela_data.bin";
+    $(Q)mkdir -p ${BOARD_DIR}/prebuilts/image;
+    $(Q)dd if=/dev/zero of=${BOARD_DIR}/prebuilts/image/vela_data.bin bs=1M count=120;
+    $(Q)mkfs.fat ${BOARD_DIR}/prebuilts/image/vela_data.bin;
+    $(Q)mcopy -i ${BOARD_DIR}/prebuilts/image/vela_data.bin -sv $(BOARD_DIR)/prebuilts/data/UDISK/* :: > /dev/null 2>&1;
+endef
