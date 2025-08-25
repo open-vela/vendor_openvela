@@ -30,6 +30,9 @@ nuttx_add_extra_library(${EXTRA_LIBS})
 set_property(GLOBAL PROPERTY LD_SCRIPT
                              "${NUTTX_BOARD_ABS_DIR}/scripts/${LD_SCRIPT_FILE}")
 # POSTBUILD
+
+set(DATA_BIN ${CMAKE_BINARY_DIR}/vela_data.bin)
+
 add_custom_target(
   nuttx_post_build
   DEPENDS nuttx
@@ -41,9 +44,7 @@ add_custom_target(
   COMMAND genromfs -f ${CMAKE_BINARY_DIR}/vela_system.bin -d
           ${NUTTX_BOARD_ABS_DIR}/prebuilts/data/res
   COMMAND mkdir -p ${NUTTX_BOARD_ABS_DIR}/prebuilts/image;
-  COMMAND
-    dd if=/dev/zero of=${NUTTX_BOARD_ABS_DIR}/prebuilts/image/vela_data.bin
-    bs=1M count=120;
-  COMMAND mkfs.fat ${NUTTX_BOARD_ABS_DIR}/prebuilts/image/vela_data.bin;
-  COMMAND mcopy -i ${NUTTX_BOARD_ABS_DIR}/prebuilts/image/vela_data.bin -sv
+  COMMAND dd if=/dev/zero of=${DATA_BIN} bs=1M count=120;
+  COMMAND mkfs.fat ${DATA_BIN};
+  COMMAND mcopy -i ${DATA_BIN} -sv
           ${NUTTX_BOARD_ABS_DIR}/prebuilts/data/UDISK/* :: > /dev/null 2>&1;)
