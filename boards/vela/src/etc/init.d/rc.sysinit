@@ -20,6 +20,8 @@
 
 #include <nuttx/config.h>
 
+set +e
+
 #ifdef CONFIG_LIBC_LOCALTIME
 set TZ Asia/Shanghai
 #endif
@@ -40,12 +42,36 @@ mount -t binfs /bin
 mount -t tmpfs /tmp
 #endif
 
+#ifdef CONFIG_FS_HOSTFS
+mount -t hostfs -o fs=vendor/qemu/boards/vela/resource /host
+#endif
+
 #ifdef CONFIG_FS_ROMFS
 mount -t romfs /dev/virtblk0 /system
 #endif
 
 #ifdef CONFIG_FS_FATFS
 mount -t fatfs /dev/virtblk1 /data
+if [ ! -e /data ]
+then
+    mount -t fatfs  /dev/virtblk0 /data
+fi
+#endif
+
+#ifdef CONFIG_FS_V9FS
+mount -t v9fs -o trans=virtio,tag=host /share
+#endif
+
+#if defined(CONFIG_FS_RPMSGFS) && defined(CONFIG_VELA_TEE)
+mount -t rpmsgfs -o cpu=ap,fs=/data /data
+#endif
+
+#if defined(CONFIG_FS_TMPFS) && !defined(CONFIG_VELA_TEE)
+if [ ! -e /data ]
+then
+    echo "not found /data, create tmpfs instead"
+    mount -t tmpfs /data
+fi
 #endif
 
 #ifndef CONFIG_NSH_DISABLE_TIMEDATECTL
