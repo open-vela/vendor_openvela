@@ -52,22 +52,6 @@ mediad &
 bluetoothd &
 #endif
 
-#ifdef CONFIG_FS_HOSTFS
-mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
-#endif
-
-#ifdef CONFIG_FS_TMPFS
-mount -t tmpfs /tmp
-#endif
-
-#ifdef CONFIG_FS_FATFS
-mount -t fatfs  /dev/virtblk0 /data
-#endif
-
-#if defined(CONFIG_FS_RPMSGFS) && defined(CONFIG_VELA_TEE)
-mount -t rpmsgfs -o cpu=ap,fs=/data /data
-#endif
-
 #ifdef CONFIG_OPTEE_OS
 opteed &
 #endif
