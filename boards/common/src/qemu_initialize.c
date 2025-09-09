@@ -85,7 +85,7 @@ void qemu_board_initialize(void)
 }
 #endif
 
-#ifdef CONFIG_ARCH_CHIP_GOLDFISH_ARM64
+#ifdef CONFIG_ARCH_CHIP_GOLDFISH
 void goldfish_board_initialize(void)
 {
 }
