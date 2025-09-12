@@ -87,13 +87,11 @@ file(WRITE ${CMAKE_BINARY_DIR}/advancedFeatures.ini "${emulator_feature_str}")
 add_custom_target(
   gen_images ALL
   DEPENDS nuttx
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  COMMAND genromfs -f ${CMAKE_BINARY_DIR}/vela_system.bin -d
-          ${NUTTX_BOARD_ABS_DIR}/prebuilts/system;
-  COMMAND dd if=/dev/zero of=${CMAKE_BINARY_DIR}/vela_data.bin bs=1M count=256;
-  COMMAND mkfs.fat ${CMAKE_BINARY_DIR}/vela_data.bin;
-  COMMAND mcopy -i ${CMAKE_BINARY_DIR}/vela_data.bin -sv
-          ${NUTTX_BOARD_ABS_DIR}/prebuilts/data/* :: > /dev/null 2>&1;)
+  WORKING_DIRECTORY .
+  COMMAND genromfs -f ${CMAKE_BINARY_DIR}/vela_system.bin -d ${NUTTX_BOARD_ABS_DIR}/prebuilts/system
+  COMMAND dd if=/dev/zero of=${CMAKE_BINARY_DIR}/vela_data.bin bs=1M count=256
+  COMMAND mkfs.fat ${CMAKE_BINARY_DIR}/vela_data.bin
+  COMMAND mcopy -i ${CMAKE_BINARY_DIR}/vela_data.bin -sv ${NUTTX_BOARD_ABS_DIR}/prebuilts/data/ ::)
 
 if(CONFIG_VELA_AP)
   add_custom_target(
