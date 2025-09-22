@@ -79,7 +79,7 @@
  *
  ****************************************************************************/
 
-#ifdef CONFIG_ARCH_CHIP_QEMU
+#ifdef CONFIG_ARCH_CHIP_QEMU_ARM64
 void qemu_board_initialize(void)
 {
 }
