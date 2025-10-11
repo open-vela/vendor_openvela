@@ -392,3 +392,7 @@ int board_get_did(uint8_t *uniqueid)
   *(uint64_t *)uniqueid = strtoull(g_misc_data[BOARDIOC_DATA_DID].data, NULL, 10);
   return OK;
 }
+
+void qemu_board_initialize(void)
+{
+}
