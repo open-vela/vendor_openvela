@@ -24,7 +24,7 @@
 
 #include <nuttx/arch.h>
 #include <nuttx/board.h>
-#include <nuttx/lib/modlib.h>
+#include <nuttx/lib/elf.h>
 #ifdef CONFIG_SENSORS_GOLDFISH_GNSS
 #include <nuttx/sensors/goldfish_gnss.h>
 #endif
@@ -181,19 +181,19 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
   /* Initialize the ELF library to load the program binary. */
 
-  ret = modlib_initialize(path, &loadinfo);
+  ret = libelf_initialize(path, &loadinfo);
   if (ret < 0)
     {
-      berr("Failed to modlib_initialize: %d\n", ret);
+      berr("Failed to libelf_initialize: %d\n", ret);
       return ret;
     }
 
   /* Load the program binary */
 
-  ret = modlib_load_vma(&loadinfo, true);
+  ret = libelf_load_vma(&loadinfo, true);
   if (ret < 0)
     {
-      berr("Failed to modlib_load_vma: %d\n", ret);
+      berr("Failed to libelf_load_vma: %d\n", ret);
       return ret;
     }
 
