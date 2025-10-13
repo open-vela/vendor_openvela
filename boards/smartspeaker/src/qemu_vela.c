@@ -230,27 +230,6 @@ static void register_devices_from_fdt(void)
 #endif
 }
 
-#ifdef CONFIG_RTC_PL031
-int up_rtc_initialize(void)
-{
-  struct rtc_lowerhalf_s *lowerhalf;
-  const void *fdt = fdt_get();
-
-  if (fdt == NULL)
-    {
-      return -EINVAL;
-    }
-
-  lowerhalf = pl031_initialize(fdt_get_reg_base_by_path(fdt, "/pl031"),
-                               fdt_get_irq_by_path(fdt, 1, "/pl031",
-                                                   QEMU_SPI_IRQ_BASE));
-
-  up_rtc_set_lowerhalf(lowerhalf, true);
-
-  return rtc_initialize(0, lowerhalf);
-}
-#endif
-
 #endif
 
 static int board_misc_init(void)
