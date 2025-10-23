@@ -29,7 +29,7 @@
 #include <nuttx/board.h>
 #include <nuttx/fs/fs.h>
 
-#ifdef CONFIG_ONESHOT
+#ifdef CONFIG_INTEL64_ONESHOT
 #  include <nuttx/timers/oneshot.h>
 #endif
 
@@ -61,7 +61,7 @@
 int board_init_app(void)
 {
   int ret = OK;
-#ifdef CONFIG_ONESHOT
+#ifdef CONFIG_INTEL64_ONESHOT
   struct oneshot_lowerhalf_s *os = NULL;
 #endif
 
@@ -75,7 +75,7 @@ int board_init_app(void)
     }
 #endif
 
-#ifdef CONFIG_ONESHOT
+#ifdef CONFIG_INTEL64_ONESHOT
   os = oneshot_initialize(ONESHOOT_TIMER, 10);
   if (os)
     {
