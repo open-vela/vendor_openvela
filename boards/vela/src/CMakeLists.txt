@@ -31,49 +31,34 @@ if(CONFIG_LIBC_FDT)
                              PRIVATE ${NUTTX_DIR}/libs/libc/fdt/dtc/libfdt)
 endif()
 
-set(VELARCSRCS etc/init.d/rcS etc/init.d/rc.sysinit)
-
-if(${CONFIG_KVDB})
-  list(APPEND VELARCSRCS etc/build.prop)
+add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rcS
+                 ${CMAKE_CURRENT_SOURCE_DIR}/etc/init.d/rc.sysinit)
+if(CONFIG_KVDB)
+  add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/build.prop)
 endif()
 
-if(${CONFIG_MEDIA_SERVER})
-  list(APPEND VELARCSRCS etc/media/graph.conf)
-  list(APPEND VELARCRAWS etc/media/criteria.txt)
-  list(APPEND VELARCRAWS etc/media/settings.pfw)
-  if(${CONFIG_VELA_HOST})
-    list(APPEND VELARCSRCS etc/media/graph_vela.conf)
-  elseif(${CONFIG_VELA_REMOTE})
-    list(APPEND VELARCSRCS etc/media/graph_remote.conf)
+if(CONFIG_MEDIA_SERVER)
+  add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/graph.conf)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/criteria.txt)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/settings.pfw)
+  if(CONFIG_VELA_HOST)
+    add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/graph_vela.conf)
+  elseif(CONFIG_VELA_REMOTE)
+    add_board_rcsrcs(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/graph_remote.conf)
   endif()
 endif()
 
-if(${CONFIG_DBUS_DAEMON})
-  list(APPEND VELARCRAWS etc/dbus-1/system.conf)
-  list(APPEND VELARCRAWS etc/dbus-1/system.d/)
+if(CONFIG_DBUS_DAEMON)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/dbus-1/system.conf)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/dbus-1/system.d/)
 endif()
 
-if(${CONFIG_OFONO_RILMODEM})
-  list(APPEND VELARCRAWS
-       etc/mobile-broadband-provider-info/serviceproviders.xml)
+if(CONFIG_OFONO_RILMODEM)
+  add_board_rcraws(
+    ${CMAKE_CURRENT_SOURCE_DIR}/etc/mobile-broadband-provider-info/serviceproviders.xml
+  )
 endif()
 
-if(${CONFIG_MEDIA_FOCUS})
-  list(APPEND VELARCRAWS etc/media/media_focus.conf)
-endif()
-
-if(CONFIG_ETC_ROMFS)
-  nuttx_add_romfs(
-    NAME
-    etc
-    MOUNTPOINT
-    etc
-    RCSRCS
-    ${VELARCSRCS}
-    RCRAWS
-    ${VELARCRAWS}
-    PATH
-    ${CMAKE_CURRENT_BINARY_DIR}/etc)
-
-  target_link_libraries(board PRIVATE romfs_etc)
+if(CONFIG_MEDIA_FOCUS)
+  add_board_rcraws(${CMAKE_CURRENT_SOURCE_DIR}/etc/media/media_focus.conf)
 endif()
