@@ -1,5 +1,5 @@
 /****************************************************************************
- * vendor/openvela/boards/common/src/vela.c
+ * vendor/openvela/boards/common/src/qemu_initialize.c
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -201,8 +201,8 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
 #ifdef CONFIG_ARM_BUSY_WAIT
   *g_smp_busy_wait = 0;
-  SP_DSB();
 #endif
+  UP_DSB();
 
 #ifdef CONFIG_VELA_TEE
   g_ap_entry = loadinfo.ehdr.e_entry;
@@ -236,7 +236,9 @@ int board_power_off(int status)
 #ifdef CONFIG_BOARDCTL_RESET
 int board_reset(int status)
 {
+#ifndef CONFIG_ARCH_ARMV8R
   up_systemreset();
+#endif
   return 0;
 }
 #endif
