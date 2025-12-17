@@ -48,6 +48,10 @@ adbd &
 mediad &
 #endif
 
+#ifdef CONFIG_BLUETOOTH_STORAGE_UPDATE
+bt_storage_update
+#endif
+
 #ifdef CONFIG_BLUETOOTH_SERVER
 bluetoothd &
 #endif
