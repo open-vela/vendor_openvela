@@ -5,7 +5,6 @@
 # You can then do "make savedefconfig" to generate a new defconfig file that includes your
 # modifications.
 #
-# CONFIG_FEATURE_TEST_CLIENT is not set
 # CONFIG_NSH_DISABLE_DATE is not set
 # CONFIG_NSH_DISABLE_MW is not set
 # CONFIG_TLS_ALIGNED is not set
