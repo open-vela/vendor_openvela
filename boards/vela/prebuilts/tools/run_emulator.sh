@@ -35,13 +35,50 @@ AVD_HOME="${HOME}/.vela/vvd"
 AVD_NAME="Vela_Generic_Device"
 AVD_DISPLAY_NAME=$(echo ${AVD_NAME} | tr '_' ' ')
 
+AVD_PATH_REL="avd/${AVD_NAME}.vvd"
+
+INDEX_PROVIDED=false
+QEMU_OPTION="-qemu"
+ARG_OPTION=""
+
+while [ $# -gt 0 ]; do
+  arg="$1"
+  echo "arg=$arg"
+
+  case "$arg" in
+    "-keep")
+      if [[ -n $2 ]]; then
+        AVD_NAME="$2"
+        INDEX_PROVIDED=true
+        shift
+      else
+        echo "Error: -keep requires a value."
+        exit 1
+      fi
+      ;;
+    "-qemu")
+      QEMU_OPTION=""
+      ARG_OPTION="${ARG_OPTION} ${arg}"
+      ;;
+    "-p")
+      HOST_9PFS_DIR="$2"
+      shift
+      ;;
+    *)
+      ARG_OPTION="${ARG_OPTION} ${arg}"
+      ;;
+  esac
+
+  shift
+done
+
 if [[ -n ${CUSTOM_AVD_SPACE} ]];then
   AVD_PATH="${CUSTOM_AVD_SPACE}/${AVD_NAME}.vvd"
 else
   AVD_PATH="${AVD_HOME}/${AVD_NAME}.vvd"
 fi
 
-AVD_PATH_REL="avd/${AVD_NAME}.vvd"
+HOST_9PFS_DIR="${AVD_PATH}/share"
 AVD_INI="${AVD_HOME}/${AVD_NAME}.ini"
 AVD_CONFIG_INI="${AVD_PATH}/config.ini"
 
@@ -105,15 +142,16 @@ skin.name = xiaomi_smart_screen_10
 skin.path = ${TARGETDIR}/prebuilts/tools/xiaomi_smart_screen_10
 EOF
 
-QEMU_OPTION="-qemu"
-
-for arg in "$@"
-do
-  echo "arg=$arg"
-  if [ $arg == "-qemu" ];
-    then QEMU_OPTION="";
-  fi
-done
+if [ -e ${AVD_PATH}/coredump.core ]; then
+  core_format=$(file ${AVD_PATH}/coredump.core)
+  timesamp=$(date +%Y%m%d%H%M%S)
+  mv ${AVD_PATH}/coredump.core ${AVD_PATH}/${timesamp}.core
+  dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
+  echo "A core file already exists. will be backed to ${timesamp}.core"
+else
+  echo "Create a core file"
+  dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
+fi
 
 if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   echo "Copy vela_data.img"
@@ -121,6 +159,8 @@ if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
 fi
 
 QEMU_OPTION="${QEMU_OPTION} \
+-drive index=2,id=vendor,if=none,format=raw,file=${AVD_PATH}/coredump.core \
+-device virtio-blk-device,bus=virtio-mmio-bus.5,drive=vendor \
 -netdev user,id=network,net=10.0.2.0/24,dhcpstart=10.0.2.16 \
 -device virtio-net-device,netdev=network,bus=virtio-mmio-bus.4 \
 -device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting"
