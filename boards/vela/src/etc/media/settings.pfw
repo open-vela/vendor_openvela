@@ -1,12 +1,10 @@
-domain: SpeakerDomain
-	conf: sco
+domain: A2dpsinkDomain
+	conf: open
+		AvailableDevices Includes a2dpsnk
+		FFmpegCommand = a2dpsnk,start;
+	conf: stop
 		ALL
-			AvailableDevices Includes sco
-			UsingDevices     Includes sco
-		FFmpegCommand = pcm0p,set_parameter,set_scenario=sco;MixSpeaker,weights,0 0 0 0 0 0 0 1;
-	conf: music
-		ALL
-		FFmpegCommand = pcm0p,set_parameter,set_scenario=music;MixSpeaker,weights,1 1 1 1 1 1 1 0;
+		FFmpegCommand = a2dpsnk,stop;
 
 domain: SCOrxDomain
 	conf: enable
@@ -122,3 +120,13 @@ domain: AlarmVolumeDomain
 		AlarmVolume In 10
 		FFmpegCommand = VolAlarm,volume,1;
 
+domain: A2dpsnkVolumeDomain
+	conf: X
+		A2dpsnkVolume In 0
+		FFmpegCommand = VolA2dpsnk,volume,0;
+	conf: index-%A2dpsnkVolume
+		A2dpsnkVolume In [1,9]
+		FFmpegCommand = VolA2dpsnk,volume,10^(-4*(10-%A2dpsnkVolume%)/20);
+	conf: 10
+		A2dpsnkVolume In 10
+		FFmpegCommand = VolA2dpsnk,volume,1;
