@@ -208,4 +208,4 @@ QEMU_OPTION="${QEMU_OPTION} \
 -device virtio-9p-device,id=fs0,fsdev=fsdev0,mount_tag=host"
 fi
 
-${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel $@ ${QEMU_OPTION}
+${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel $@ ${ARG_OPTION} ${QEMU_OPTION}
