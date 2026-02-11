@@ -1,20 +1,33 @@
-ExclusiveCriterion AudioMode        : normal phone
+ExclusiveCriterion Music                   : abufsrc@Music
+ExclusiveCriterion Ring Info Notify Health : abufsrc@Ring
+ExclusiveCriterion Media                   : abufsrc@Media
+ExclusiveCriterion Alarm                   : abufsrc@Alarm
+ExclusiveCriterion Enforced                : abufsrc@Enforced
+ExclusiveCriterion SCOrx                   : alsasrc@SCOrx
+ExclusiveCriterion MDMrx                   : alsasrc@MDMrx
+ExclusiveCriterion TTS                     : abufsrc@TTS
+ExclusiveCriterion Sport                   : abufsrc@Sport
+ExclusiveCriterion Emergency               : abufsrc@Emergency
+ExclusiveCriterion CallRing                : abufsrc@CallRing
+ExclusiveCriterion Spatial                 : abufsrc@Spatial
+ExclusiveCriterion Capture                 : abufsink@Capture
+ExclusiveCriterion Change                  : abufsink@Change
+ExclusiveCriterion Netcomm                 : abufsrc@netcomm
+ExclusiveCriterion Video1                  : abufsrc@Video
+ExclusiveCriterion Video1Params            : format=vtun:server_path=Vtun_Video1:frame_count=3:pix_fmt=28
+ExclusiveCriterion Video0                  : abufsrc@Video
+ExclusiveCriterion Video0Params            : format=fbdev:devname=/dev/fb0:pix_fmt=28
+ExclusiveCriterion AudioMode        : normal ringtone phone
+ExclusiveCriterion MicMode          : off on = on
 InclusiveCriterion UsingDevices     : mic sco = mic
-InclusiveCriterion AvailableDevices : a2dp sco
-NumericalCriterion HFPSampleRate    : 8000 16000 = 8000
-InclusiveCriterion ActiveStreams    : Ring0 Music0 Music1 Media0 Alarm0 Enforced0 cap movie picture
-ExclusiveCriterion Ring Info Notify Health : amovie_async@Ring
-ExclusiveCriterion Music Record            : amovie_async@Music
-ExclusiveCriterion Sport                   : amovie_async@Media
-ExclusiveCriterion Alarm                   : amovie_async@Alarm
-ExclusiveCriterion Enforced                : amovie_async@Enforced
-ExclusiveCriterion Video                   : movie_async@Video
-ExclusiveCriterion Video0                  : movie_async@Video0
-ExclusiveCriterion VideoSink               : moviesink_async
-ExclusiveCriterion AudioSink cap TalkCap   : amoviesink_async
-ExclusiveCriterion PictureSink             : vmoviesink_async
-ExclusiveCriterion persist.media.MuteMode    MuteMode                                        : off on = off
-NumericalCriterion persist.media.SCOVolume   SCOVolume                                       : [0,10] = 5
-NumericalCriterion persist.media.RingVolume  RingVolume NotifyVolume HealthVolume InfoVolume : [0,10] = 5
-NumericalCriterion persist.media.MediaVolume RecordVolume TTSVolume SportVolume MusicVolume  : [0,10] = 5
-NumericalCriterion persist.media.AlarmVolume AlarmVolume                                     : [0,10] = 5
+InclusiveCriterion AvailableDevices : a2dp sco digital modem wtp
+NumericalCriterion HFPSampleRate    : 8000 16000 = 16000
+ExclusiveCriterion persist.media.MuteMode    MuteMode                                        : off on = on
+NumericalCriterion persist.media.SCOVolume   SCOVolume                                       : [0,15] = 5
+NumericalCriterion persist.media.RingVolume  RingVolume NotifyVolume HealthVolume InfoVolume : [0,10] = 4
+NumericalCriterion persist.media.MediaVolume RecordVolume TTSVolume MusicVolume              : [0,10] = 4
+NumericalCriterion persist.media.SportVolume SportVolume                                     : [0,10] = 4
+NumericalCriterion persist.media.AlarmVolume AlarmVolume                                     : [0,10] = 4
+NumericalCriterion persist.media.EmergencyVolume   EmergencyVolume IntercomVolume            : [0,10] = 5
+NumericalCriterion persist.media.A2dpsnkVolume A2dpsnkVolume                                 : [0,10] = 5
+ExclusiveCriterion VoiceChangeMode  : normal dashu xiaochou = normal

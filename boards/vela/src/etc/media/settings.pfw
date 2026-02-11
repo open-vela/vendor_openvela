@@ -1,124 +1,625 @@
-domain: SpeakerDomain
-	conf: sco
-		ALL
-			AvailableDevices Includes sco
-			UsingDevices     Includes sco
-		FFmpegCommand = pcm0p,set_parameter,set_scenario=sco;MixSpeaker,weights,0 0 0 0 0 0 0 1;
-	conf: music
-		ALL
-		FFmpegCommand = pcm0p,set_parameter,set_scenario=music;MixSpeaker,weights,1 1 1 1 1 1 1 0;
+domain: MediaSwitchDomain
+    conf: a2dp
+        AvailableDevices Includes a2dp
+        FFmpegCommand = Music,map,0 1;Ring,map,0 1;Alarm,map,1 1;Notify,map,0 1;Sport,map,0 1;Video,map,0 1;
+    conf: speaker
+        ALL
+        FFmpegCommand = Music,map,1 0;Ring,map,1 0;Alarm,map,1 0;Notify,map,1 0;Sport,map,1 0;Video,map,1 0;a2dpsrc,unlink,;
+
+domain: netcommDomain
+    conf: netcomm-sco
+        ALL
+            AudioMode        Is       normal
+            AvailableDevices Includes digital
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = netcomm,map,0 1;
+    conf: netcomm
+        ALL
+        FFmpegCommand = netcomm,map,1 0;
+
+domain: pcm0cDomain
+    conf: sco
+        ALL
+            MicMode          Is       on
+            AudioMode        Is       phone
+            AvailableDevices Excludes modem
+            AvailableDevices Excludes digital
+            AvailableDevices Excludes wtp
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = pcm0c,unmute,;pcm0c,sample_rate,%HFPSampleRate%;pcm0c,map,0 1 0 0;pcm0c,link,;
+    conf: sco-mute
+        ALL
+            MicMode          Is       off
+            AudioMode        Is       phone
+            AvailableDevices Excludes modem
+            AvailableDevices Excludes digital
+            AvailableDevices Excludes wtp
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = pcm0c,mute,;
+    conf: btcomm/modem
+        ALL
+            MicMode          Is       on
+            AudioMode        Is       phone
+            ANY
+                AvailableDevices Includes modem
+                AvailableDevices Includes digital
+            UsingDevices         Excludes sco
+        FFmpegCommand = pcm0c,unmute,;pcm0c,sample_rate,%HFPSampleRate%;pcm0c,map,0 0 1 0;pcm0c,link,;
+    conf: wtpcomm
+        ALL
+            MicMode          Is       on
+            AudioMode        Is       phone
+            AvailableDevices Includes wtp
+            UsingDevices     Excludes sco
+        FFmpegCommand = pcm0c,unmute,;pcm0c,sample_rate,%HFPSampleRate%;pcm0c,map,0 0 0 1;pcm0c,link,;
+    conf: netcomm
+        ALL
+            MicMode          Is       on
+            AvailableDevices Includes digital
+            UsingDevices     Excludes sco
+        FFmpegCommand = pcm0c,unmute,;pcm0c,map,1 0 0 0;
+    conf: cap
+        MicMode          Is       on
+        FFmpegCommand = pcm0c,unmute,;pcm0c,map,1 0 0 0;pcm0c,link,;
+    conf: off
+        ALL
+        FFmpegCommand = pcm0c,unmute,;pcm0c,map,0 0 0 0;pcm0c,unlink,;
 
 domain: SCOrxDomain
-	conf: enable
-		ALL
-			AvailableDevices Includes sco
-			UsingDevices     Includes sco
-		FFmpegCommand = SCOrx,sample_rate,%HFPSampleRate%;SelSCO,map,0;
-	conf: disable
-		ALL
-		FFmpegCommand = SelSCO,map,-1;
+    conf: sco
+        ALL
+            AudioMode        Is       phone
+            AvailableDevices Excludes modem
+            AvailableDevices Excludes digital
+            AvailableDevices Excludes wtp
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = SCOrx,unmute,;SCOrx,sample_rate,%HFPSampleRate%;SCOrx,map,1 0 0 0;SCOrx,link,;
+    conf: btcomm/modem-sco
+        ALL
+            MicMode          Is       on
+            AudioMode        Is       phone
+            ANY
+                AvailableDevices Includes modem
+                AvailableDevices Includes digital
+            AvailableDevices     Includes sco
+            UsingDevices         Includes sco
+        FFmpegCommand = SCOrx,unmute,;SCOrx,sample_rate,%HFPSampleRate%;SCOrx,map,0 1 0 0;SCOrx,link,;
+    conf: btcomm/modem-sco-mute
+        ALL
+            MicMode          Is       off
+            AudioMode        Is       phone
+            ANY
+                AvailableDevices Includes modem
+                AvailableDevices Includes digital
+            AvailableDevices     Includes sco
+            UsingDevices         Includes sco
+        FFmpegCommand = SCOrx,mute,;
+    conf: netcomm-sco
+        ALL
+            AudioMode        Is       normal
+            AvailableDevices Includes digital
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = SCOrx,unmute,;SCOrx,sample_rate,%HFPSampleRate%;SCOrx,map,0 0 1 0;SCOrx,link,;
+    conf: wtpcomm-sco
+        ALL
+            AudioMode        Is       phone
+            AvailableDevices Includes wtp
+            AvailableDevices Includes sco
+            UsingDevices     Includes sco
+        FFmpegCommand = SCOrx,unmute,;SCOrx,sample_rate,%HFPSampleRate%;SCOrx,map,0 0 0 1;SCOrx,link,;
+    conf: off
+        ALL
+        FFmpegCommand = SCOrx,unmute,;SCOrx,map,0 0 0 0;SCOrx,unlink,;
 
-domain: PlayDomain
-	conf: a2dp
-		AvailableDevices Includes a2dp
-		FFmpegCommand = SelPlay,map,-1 0;
-	conf: speaker
-		ALL
-		FFmpegCommand = SelPlay,map,0 -1;
+domain: MDMrxDomain
+    conf: btcomm/modem
+        ALL
+            AudioMode        Is       phone
+            ANY
+                AvailableDevices Includes modem
+                AvailableDevices Includes digital
+            UsingDevices         Excludes sco
+        FFmpegCommand = MDMrx,map,1 0;MDMrx,link,;
+    conf: ringtone-modem
+        ALL
+            AudioMode        Is       ringtone
+            AvailableDevices Includes modem
+        FFmpegCommand = MDMrx,map,1 0;MDMrx,link,;
+    conf: btcomm/modem-sco
+        ALL
+            AudioMode        Is       phone
+            ANY
+                AvailableDevices Includes modem
+                AvailableDevices Includes digital
+            AvailableDevices     Includes sco
+            UsingDevices         Includes sco
+        FFmpegCommand = MDMrx,map,0 1;MDMrx,link,;
+    conf: off
+        ALL
+        FFmpegCommand = MDMrx,map,0 0;MDMrx,unlink,;
 
-domain: AlarmDomain
-	conf: both
-		AvailableDevices Includes a2dp
-		FFmpegCommand = SelAlarm,map,0 0;
-	conf: speaker
-		ALL
-		FFmpegCommand = SelAlarm,map,0 -1;
-
-domain: SCOtxDomain
-	conf: enable
-		ALL
-			AvailableDevices Includes sco
-			UsingDevices     Includes sco
-		FFmpegCommand = SCOtx,sample_rate,%HFPSampleRate%;SCOtx,start,;
-	conf: default
-		ALL
-		FFmpegCommand = SCOtx,stop,;
-
-domain: MicDomain
-	conf: phone
-		ALL
-			UsingDevices     Includes mic
-			AvailableDevices Includes sco
-			UsingDevices     Includes sco
-			AudioMode        Is       phone
-		FFmpegCommand = pcm0c,start,;SelCap,map,-1 -1 0;
-	conf: capture
-		UsingDevices Includes mic
-		FFmpegCommand = pcm0c,start,;SelCap,map,0 0 -1;
-	conf: off
-		ALL
-		FFmpegCommand = pcm0c,stop,;
-
-domain: IncallVolumeDomain
-	conf: X
-		AudioMode Is normal
-		FFmpegCommand = ;
-	conf: index-0
-		SCOVolume In 0
-		FFmpegCommand = VolSCO,volume,0;
-	conf: index-%SCOVolume
-		SCOVolume In [1,9]
-		FFmpegCommand = VolSCO,volume,10^(-4*(10-%SCOVolume%)/20);
-	conf: index-10
-		SCOVolume In 10
-		FFmpegCommand = VolSCO,volume,1;
-
-domain: TTSVolumeDomain
-	conf: X
-		AudioMode Is phone
-		FFmpegCommand = ;
-	conf: index-0
-		MusicVolume In 0
-		FFmpegCommand = VolSCO,volume,0;
-	conf: index-%MusicVolume
-		MusicVolume In [1,9]
-		FFmpegCommand = VolSCO,volume,10^(-4*(10-%MusicVolume%)/20);
-	conf: index-10
-		MusicVolume In 10
-		FFmpegCommand = VolSCO,volume,1;
-
-domain: RingVolumeDomain
-	conf: X
-		ANY
-			MuteMode   Is on
-			RingVolume In 0
-		FFmpegCommand = VolRing,volume,0;
-	conf: index-%RingVolume
-		RingVolume In [1,9]
-		FFmpegCommand = VolRing,volume,10^(-4*(10-%RingVolume%)/20);
-	conf: index-10
-		RingVolume In 10
-		FFmpegCommand = VolRing,volume,1;
+domain: pcm0pParamDomain
+    conf: modem
+        ALL
+            AudioMode        Is       phone
+            AvailableDevices Includes modem
+            UsingDevices     Excludes sco
+        FFmpegCommand = pcm0p,set_parameter,set_scenario=modem;
+    conf: btcomm
+        ALL
+            AudioMode        Is       phone
+            AvailableDevices Includes digital
+            UsingDevices     Excludes sco
+        FFmpegCommand = pcm0p,set_parameter,set_scenario=btTalk;
+    conf: netcomm
+        ALL
+            AvailableDevices Includes digital
+            UsingDevices     Excludes sco
+        FFmpegCommand = pcm0p,set_parameter,set_scenario=netTalk;
+    conf: sco
+        ALL
+            AvailableDevices Excludes modem
+            AvailableDevices Excludes digital
+            UsingDevices     Includes sco
+            AvailableDevices Includes sco
+        FFmpegCommand = pcm0p,set_parameter,set_scenario=sco;
+    conf: play
+        ALL
+        FFmpegCommand = pcm0p,set_parameter,set_scenario=music;
 
 domain: MediaVolumeDomain
-	conf: X
-		MusicVolume In 0
-		FFmpegCommand = VolMedia,volume,0;
-	conf: index-%MusicVolume
-		MusicVolume In [1,9]
-		FFmpegCommand = VolMedia,volume,10^(-4*(10-%MusicVolume%)/20);
-	conf: 10
-		MusicVolume In 10
-		FFmpegCommand = VolMedia,volume,1;
+    conf: mute
+        persist.media.MediaVolume In 0
+        FFmpegCommand = Music,volume,0;
+    conf: 1
+        persist.media.MediaVolume In 1
+        FFmpegCommand = Music,volume,-41dB;
+    conf: 2
+        persist.media.MediaVolume In 2
+        FFmpegCommand = Music,volume,-36dB;
+    conf: 3
+        persist.media.MediaVolume In 3
+        FFmpegCommand = Music,volume,-30dB;
+    conf: 4
+        persist.media.MediaVolume In 4
+        FFmpegCommand = Music,volume,-25dB;
+    conf: 5
+        persist.media.MediaVolume In 5
+        FFmpegCommand = Music,volume,-22dB;
+    conf: 6
+        persist.media.MediaVolume In 6
+        FFmpegCommand = Music,volume,-19dB;
+    conf: 7
+        persist.media.MediaVolume In 7
+        FFmpegCommand = Music,volume,-16dB;
+    conf: 8
+        persist.media.MediaVolume In 8
+        FFmpegCommand = Music,volume,-11dB;
+    conf: 9
+        persist.media.MediaVolume In 9
+        FFmpegCommand = Music,volume,-5dB;
+    conf: 10
+        persist.media.MediaVolume In 10
+        FFmpegCommand = Music,volume,1;
+
+domain: RingVolumeDomain
+    conf: mute
+        ANY
+            MuteMode   Is on
+            RingVolume In 0
+        FFmpegCommand = Ring,volume,0;
+    conf: index-%RingVolume
+        RingVolume In [1,9]
+        FFmpegCommand = Ring,volume,10^(-4*(10-%RingVolume%)/20);
+    conf: 10
+        RingVolume In 10
+        FFmpegCommand = Ring,volume,1;
 
 domain: AlarmVolumeDomain
-	conf: X
-		AlarmVolume In 0
-		FFmpegCommand = VolAlarm,volume,0;
-	conf: index-%AlarmVolume
-		AlarmVolume In [1,9]
-		FFmpegCommand = VolAlarm,volume,10^(-4*(10-%AlarmVolume%)/20);
-	conf: 10
-		AlarmVolume In 10
-		FFmpegCommand = VolAlarm,volume,1;
+    conf: mute
+        AlarmVolume In 0
+        FFmpegCommand = Alarm,volume,0;
+    conf: index-%AlarmVolume
+        AlarmVolume In [1,9]
+        FFmpegCommand = Alarm,volume,10^(-4*(10-%AlarmVolume%)/20);
+    conf: 10
+        AlarmVolume In 10
+        FFmpegCommand = Alarm,volume,1;
 
+domain: NotifyVolumeDomain
+    conf: mute
+        NotifyVolume In 0
+        FFmpegCommand = Notify,volume,0;
+    conf: index-%NotifyVolume
+        NotifyVolume In [1,9]
+        FFmpegCommand = Notify,volume,10^(-4*(10-%NotifyVolume%)/20);
+    conf: 10
+        NotifyVolume In 10
+        FFmpegCommand = Notify,volume,1;
+
+domain: TTSVolumeDomain
+    conf: mute
+        TTSVolume In 0
+        FFmpegCommand = TTS,volume,-5dB;
+    conf: index-%TTSVolume
+        TTSVolume In [1,9]
+        FFmpegCommand = TTS,volume,10^(-4*(10-%TTSVolume%)/20);
+    conf: 10
+        TTSVolume In 10
+        FFmpegCommand = TTS,volume,1;
+
+domain: HealthVolumeDomain
+    conf: mute
+        HealthVolume In 0
+        FFmpegCommand = Health,volume,0;
+    conf: index-%HealthVolume
+        HealthVolume In [1,9]
+        FFmpegCommand = Health,volume,10^(-4*(10-%HealthVolume%)/20);
+    conf: 10
+        HealthVolume In 10
+        FFmpegCommand = Health,volume,1;
+
+domain: SportVolumeDomain
+    conf: mute
+        SportVolume In 0
+        FFmpegCommand = Sport,volume,0;
+    conf: index-%SportVolume
+        SportVolume In [1,9]
+        FFmpegCommand = Sport,volume,10^(-4*(10-%SportVolume%)/20);
+    conf: 10
+        SportVolume In 10
+        FFmpegCommand = Sport,volume,1;
+
+domain: InfoVolumeDomain
+    conf: mute
+        InfoVolume In 0
+        FFmpegCommand = Info,volume,0;
+    conf: index-%InfoVolume
+        InfoVolume In [1,9]
+        FFmpegCommand = Info,volume,10^(-4*(10-%InfoVolume%)/20);
+    conf: 10
+        InfoVolume In 10
+        FFmpegCommand = Info,volume,1;
+
+domain: IncallVolumeDomain
+    conf: no-volume
+        ALL
+            UsingDevices     Includes sco
+            AvailableDevices Includes sco
+            ANY
+                AvailableDevices Includes digital
+                AvailableDevices Includes modem
+        FFmpegCommand = SCOrx,volume,1;
+    conf: 0
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 0
+        FFmpegCommand = SCOrx,volume,0;
+    conf: 1
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 1
+        FFmpegCommand = SCOrx,volume,-44dB;
+    conf: 2
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 2
+        FFmpegCommand = SCOrx,volume,-39.15dB;
+    conf: 3
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 3
+        FFmpegCommand = SCOrx,volume,-34.41dB;
+    conf: 4
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 4
+        FFmpegCommand = SCOrx,volume,-29dB;
+    conf: 5
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 5
+        FFmpegCommand = SCOrx,volume,-25.56dB;
+    conf: 6
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 6
+        FFmpegCommand = SCOrx,volume,-23.47dB;
+    conf: 7
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 7
+        FFmpegCommand = SCOrx,volume,-20.87dB;
+    conf: 8
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 8
+        FFmpegCommand = SCOrx,volume,-19.56dB;
+    conf: 9
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 9
+        FFmpegCommand = SCOrx,volume,-17.45dB;
+    conf: 10
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 10
+        FFmpegCommand = SCOrx,volume,-15.74dB;
+    conf: 11
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 11
+        FFmpegCommand = SCOrx,volume,-13.29dB;
+    conf: 12
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 12
+        FFmpegCommand = SCOrx,volume,-11.58dB;
+    conf: 13
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 13
+        FFmpegCommand = SCOrx,volume,-9.5dB;
+    conf: 14
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 14
+        FFmpegCommand = SCOrx,volume,-6dB;
+    conf: 15
+        ALL
+            AudioMode Is phone
+            UsingDevices Includes sco
+            SCOVolume In 15
+        FFmpegCommand = SCOrx,volume,1;
+
+domain: MDMVolumeDomain
+    conf: 0
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 0
+        FFmpegCommand = MDMrx,volume,0;CallRing,volume,0;
+    conf: 1
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 1
+        FFmpegCommand = MDMrx,volume,-44dB;CallRing,volume,-44dB;
+    conf: 2
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 2
+        FFmpegCommand = MDMrx,volume,-39.15dB;CallRing,volume,-39.15dB;
+    conf: 3
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 3
+        FFmpegCommand = MDMrx,volume,-34.41dB;CallRing,volume,-34.41dB;
+    conf: 4
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 4
+        FFmpegCommand = MDMrx,volume,-29dB;CallRing,volume,-29dB;
+    conf: 5
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 5
+        FFmpegCommand = MDMrx,volume,-25.56dB;CallRing,volume,-25.56dB;
+    conf: 6
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 6
+        FFmpegCommand = MDMrx,volume,-23.47dB;CallRing,volume,-23.47dB;
+    conf: 7
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 7
+        FFmpegCommand = MDMrx,volume,-20.87dB;CallRing,volume,-20.87dB;
+    conf: 8
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 8
+        FFmpegCommand = MDMrx,volume,-19.56dB;CallRing,volume,-19.56dB;
+    conf: 9
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 9
+        FFmpegCommand = MDMrx,volume,-17.45dB;CallRing,volume,-17.45dB;
+    conf: 10
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 10
+        FFmpegCommand = MDMrx,volume,-15.74dB;CallRing,volume,-15.74dB;
+    conf: 11
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 11
+        FFmpegCommand = MDMrx,volume,-13.29dB;CallRing,volume,-13.29dB;
+    conf: 12
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 12
+        FFmpegCommand = MDMrx,volume,-11.58dB;CallRing,volume,-11.58dB;
+    conf: 13
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 13
+        FFmpegCommand = MDMrx,volume,-9.5dB;CallRing,volume,-9.5dB;
+    conf: 14
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 14
+        FFmpegCommand = MDMrx,volume,-6dB;CallRing,volume,-6dB;
+    conf: 15
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes modem
+            SCOVolume In 15
+        FFmpegCommand = MDMrx,volume,1;CallRing,volume,1;
+
+domain: BtcommVolumeDomain
+    conf: 0
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 0
+        FFmpegCommand = MDMrx,volume,0;CallRing,volume,0;
+    conf: 1
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 1
+        FFmpegCommand = MDMrx,volume,-34dB;CallRing,volume,-34dB;
+    conf: 2
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 2
+        FFmpegCommand = MDMrx,volume,-30dB;CallRing,volume,-30dB;
+    conf: 3
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 3
+        FFmpegCommand = MDMrx,volume,-26dB;CallRing,volume,-26dB;
+    conf: 4
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 4
+        FFmpegCommand = MDMrx,volume,-22dB;CallRing,volume,-22dB;
+    conf: 5
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 5
+        FFmpegCommand = MDMrx,volume,-18dB;CallRing,volume,-18dB;
+    conf: 6
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In  6
+        FFmpegCommand = MDMrx,volume,-14dB;CallRing,volume,-14dB;
+    conf: 7
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 7
+        FFmpegCommand = MDMrx,volume,-11dB;CallRing,volume,-11dB;
+    conf: 8
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 8
+        FFmpegCommand = MDMrx,volume,-8dB;CallRing,volume,-8dB;
+    conf: 9
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 9
+        FFmpegCommand = MDMrx,volume,-5dB;CallRing,volume,-5dB;
+    conf: 10
+        ALL
+            AudioMode Is phone
+            AvailableDevices Includes digital
+            MusicVolume In 10
+        FFmpegCommand = MDMrx,volume,1;CallRing,volume,1;
+
+domain: NetcommVolumeDomain
+    conf: mute
+        ALL
+            AudioMode          IsNot       phone
+            AvailableDevices Includes digital
+            MusicVolume      In       0
+        FFmpegCommand = Netcomm,volume,0;
+    conf: index-%MusicVolume
+        ALL
+            AudioMode          IsNot       phone
+            AvailableDevices Includes digital
+            MusicVolume      In       [1,9]
+        FFmpegCommand = Netcomm,volume,10^(-4*(10-%MusicVolume%)/20);
+    conf: 10
+        ALL
+            AudioMode          IsNot       phone
+            AvailableDevices Includes digital
+            MusicVolume      In       10
+        FFmpegCommand = Netcomm,volume,1;
+
+domain: EmergencyVolumeDomain
+    conf: mute
+        EmergencyVolume In 0
+        FFmpegCommand = Emergency,volume,0;
+    conf: index-%EmergencyVolume
+        EmergencyVolume In [1,9]
+        FFmpegCommand = Emergency,volume,10^(-4*(10-%EmergencyVolume%)/20);
+    conf: 10
+        EmergencyVolume In 10
+        FFmpegCommand = Emergency,volume,1;
+
+domain: A2dpsnkVolumeDomain
+    conf: mute
+        A2dpsnkVolume In 0
+        FFmpegCommand = a2dpsnk,volume,0;
+    conf: 1
+        A2dpsnkVolume In 1
+        FFmpegCommand = a2dpsnk,volume,-41dB;
+    conf: 2
+        A2dpsnkVolume In 2
+        FFmpegCommand = a2dpsnk,volume,-36dB;
+    conf: 3
+        A2dpsnkVolume In 3
+        FFmpegCommand = a2dpsnk,volume,-30dB;
+    conf: 4
+        A2dpsnkVolume In 4
+        FFmpegCommand = a2dpsnk,volume,-25dB;
+    conf: 5
+        A2dpsnkVolume In 5
+        FFmpegCommand = a2dpsnk,volume,-22dB;
+    conf: 6
+        A2dpsnkVolume In 6
+        FFmpegCommand = a2dpsnk,volume,-19dB;
+    conf: 7
+        A2dpsnkVolume In 7
+        FFmpegCommand = a2dpsnk,volume,-16dB;
+    conf: 8
+        A2dpsnkVolume In 8
+        FFmpegCommand = a2dpsnk,volume,-11dB;
+    conf: 9
+        A2dpsnkVolume In 9
+        FFmpegCommand = a2dpsnk,volume,-5dB;
+    conf: 10
+        A2dpsnkVolume In 10
+        FFmpegCommand = a2dpsnk,volume,1;
