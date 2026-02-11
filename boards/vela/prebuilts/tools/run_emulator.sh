@@ -31,6 +31,8 @@ if [ ! -e ${NUTTX_BIN} ]; then
   exit
 fi
 
+# default variables
+
 AVD_HOME="${HOME}/.vela/vvd"
 AVD_NAME="Vela_Generic_Device"
 AVD_DISPLAY_NAME=$(echo ${AVD_NAME} | tr '_' ' ')
@@ -40,6 +42,9 @@ AVD_PATH_REL="avd/${AVD_NAME}.vvd"
 INDEX_PROVIDED=false
 QEMU_OPTION="-qemu"
 ARG_OPTION=""
+GOLDFISH_OPTION=""
+
+# parse input arguments
 
 while [ $# -gt 0 ]; do
   arg="$1"
@@ -72,13 +77,15 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+# update variables
+
 if [[ -n ${CUSTOM_AVD_SPACE} ]];then
   AVD_PATH="${CUSTOM_AVD_SPACE}/${AVD_NAME}.vvd"
 else
   AVD_PATH="${AVD_HOME}/${AVD_NAME}.vvd"
 fi
 
-HOST_9PFS_DIR="${AVD_PATH}/share"
+HOST_9PFS_DIR=${HOST_9PFS_DIR:-"${AVD_PATH}/share"}
 AVD_INI="${AVD_HOME}/${AVD_NAME}.ini"
 AVD_CONFIG_INI="${AVD_PATH}/config.ini"
 
@@ -89,13 +96,13 @@ path=${AVD_PATH}
 path.rel=avd/${AVD_PATH_REL}
 EOF
 
-if [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, ARM aarch64')" ]; then
+if [ -n "$(file -bL ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, ARM aarch64')" ]; then
   AVD_ABI="arm64-v8a"
   AVD_ARCH="arm64"
-elif [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 32-bit LSB executable, ARM')" ]; then
+elif [ -n "$(file -bL ${NUTTX_BIN} | grep 'ELF 32-bit LSB executable, ARM')" ]; then
   AVD_ABI="armeabi-v7a"
   AVD_ARCH="arm"
-elif [ -n "$(file -b ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, x86-64')" ]; then
+elif [ -n "$(file -bL ${NUTTX_BIN} | grep 'ELF 64-bit LSB executable, x86-64')" ]; then
   AVD_ABI="x86_64"
   AVD_ARCH="x86_64"
 else
@@ -119,6 +126,7 @@ hw.camera.front = emulated
 hw.cpu.arch = ${AVD_ARCH}
 hw.cpu.ncore = 4
 hw.dPad = no
+hw.device.flavor = smartspeaker
 hw.gps = yes
 hw.gpu.enabled = yes
 hw.gpu.mode = host
@@ -127,6 +135,7 @@ hw.keyboard = yes
 hw.lcd.density = 420
 hw.lcd.height = 1280
 hw.lcd.width = 720
+hw.lcd.shape = rect
 hw.mainKeys = no
 hw.ramSize = 1024
 hw.sdCard = no
@@ -142,12 +151,21 @@ skin.name = xiaomi_smart_screen_10
 skin.path = ${TARGETDIR}/prebuilts/tools/xiaomi_smart_screen_10
 EOF
 
+if [ ! -f ${AVD_PATH}/modem_simulator ]; then
+  echo "Copy modem_simulator"
+  cp -a ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/tools/modem_simulator ${AVD_PATH}/modem_simulator
+fi
+
+# coredump device
+
 if [ -e ${AVD_PATH}/coredump.core ]; then
+
   core_format=$(file ${AVD_PATH}/coredump.core)
   timesamp=$(date +%Y%m%d%H%M%S)
   mv ${AVD_PATH}/coredump.core ${AVD_PATH}/${timesamp}.core
   dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
   echo "A core file already exists. will be backed to ${timesamp}.core"
+
 else
   echo "Create a core file"
   dd if=/dev/zero of=${AVD_PATH}/coredump.core bs=200M count=1
@@ -158,17 +176,36 @@ if [ ! -f ${AVD_PATH}/vela_data.bin ]; then
   cp ${TOP_DIR}/nuttx/vela_data.bin ${AVD_PATH}/vela_data.bin
 fi
 
+# 9pfs device
+
+if [ ! -d "$HOST_9PFS_DIR" ]; then
+  mkdir -p "$HOST_9PFS_DIR"
+fi
+
 if [ "$AVD_ARCH" == "x86_64" ]; then
-QEMU_OPTION="${QEMU_OPTION} -cpu Skylake-Client,-hle,-rtm,-mpx"
+QEMU_OPTION="${QEMU_OPTION} -cpu Skylake-Client,-hle,-rtm,-mpx
+-drive index=2,id=vendor,if=none,format=raw,file=${AVD_PATH}/coredump.core \
+-device virtio-blk-pci,drive=vendor"
+
+# 9pfs device
+
+QEMU_OPTION="${QEMU_OPTION} \
+-fsdev local,security_model=none,id=fsdev0,path=$HOST_9PFS_DIR \
+-device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=host"
 else
 QEMU_OPTION="${QEMU_OPTION} \
 -drive index=2,id=vendor,if=none,format=raw,file=${AVD_PATH}/coredump.core \
 -device virtio-blk-device,bus=virtio-mmio-bus.5,drive=vendor \
 -netdev user,id=network,net=10.0.2.0/24,dhcpstart=10.0.2.16 \
 -device virtio-net-device,netdev=network,bus=virtio-mmio-bus.4 \
--device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting"
-fi
+-device virtio-snd,bus=virtio-mmio-bus.2 -allow-host-audio -semihosting \
+-device virtio-gpu-device,xres=720,yres=1280,bus=virtio-mmio-bus.6"
 
-cp -a ${TOP_DIR}/vendor/openvela/boards/vela/prebuilts/tools/modem_simulator ${AVD_PATH}/
+# 9pfs device
+
+QEMU_OPTION="${QEMU_OPTION} \
+-fsdev local,security_model=none,id=fsdev0,path=$HOST_9PFS_DIR \
+-device virtio-9p-device,id=fs0,fsdev=fsdev0,mount_tag=host"
+fi
 
 ${EMULATOR_BIN} -vela -avd ${AVD_NAME} -show-kernel $@ ${QEMU_OPTION}
