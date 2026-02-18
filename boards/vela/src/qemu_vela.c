@@ -251,7 +251,7 @@ static void register_pci_host_from_fdt(const void *fdt)
         }
     }
 
-  pci_ecam_register(&cfg, &io, &mem, &prefetch);
+  pci_ecam_register(0, &cfg, &io, &mem, &prefetch);
 }
 #endif
 
