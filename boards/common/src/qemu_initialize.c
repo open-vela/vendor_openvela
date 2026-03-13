@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include <nuttx/arch.h>
+#include <nuttx/audio/audio_tunnel.h>
 #include <nuttx/board.h>
 #include <nuttx/lib/elf.h>
 #ifdef CONFIG_SENSORS_GOLDFISH_GNSS
@@ -133,6 +134,12 @@ void board_late_initialize(void)
 #endif
 
   board_init_rptun();
+
+#ifdef CONFIG_AUDIO_TUNNEL
+  audio_tunnel_initialize("a2dpsrc");
+  audio_tunnel_initialize("a2dpsnk");
+#endif
+
 }
 
 int board_app_initialize(uintptr_t arg)
