@@ -70,16 +70,6 @@ int board_init_app(void)
   pci_register_drivers();
 #endif
 
-#ifdef CONFIG_FS_PROCFS
-  /* Mount the procfs file system */
-
-  ret = nx_mount(NULL, "/proc", "procfs", 0, NULL);
-  if (ret < 0)
-    {
-      serr("ERROR: Failed to mount procfs at %s: %d\n", "/proc", ret);
-    }
-#endif
-
 #ifdef CONFIG_INTEL64_ONESHOT
   os = oneshot_initialize(ONESHOOT_TIMER, 10);
   if (os)
