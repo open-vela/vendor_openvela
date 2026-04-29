@@ -31,6 +31,7 @@ ENTRY(__start)
 
 SECTIONS
 {
+    /DISCARD/ : { *(.note .note.*) }
     .boot : {
         *(.vectors)
     } > code0
