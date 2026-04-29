@@ -48,8 +48,12 @@ SECTIONS
 
   _start = .;
   .text : {
+        . = ALIGN(4096);
         _stext = .;            /* Text section */
+       KEEP(*(.start))
+       KEEP(*(.text.__start))
        *(.text)
+       *(.text.*)
        *(.text.cold)
        *(.text.unlikely)
        *(.fixup)
@@ -101,6 +105,7 @@ SECTIONS
         _sdata = .;
        *(.data.page_aligned)
        *(.data)
+       *(.data.*)
        . = ALIGN(8);
        *(.data.rel)
        *(.data.rel.*)
@@ -111,6 +116,7 @@ SECTIONS
   .bss : {                     /* BSS */
        _sbss = .;
        *(.bss)
+       *(.bss.*)
        . = ALIGN(1 << 3);
   } :text
   . = ALIGN(4096);
