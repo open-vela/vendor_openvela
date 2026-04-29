@@ -232,7 +232,9 @@ int board_boot_image(const char *path, uint32_t hdr_size)
 
   if (sched_getcpu() == 0)
     {
+#ifdef CONFIG_ARM_PSCI
       psci_cpu_on(1, (uintptr_t)(void *)loadinfo.ehdr.e_entry);
+#endif
     }
 #endif
 
